@@ -1,0 +1,452 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============ AUTH & USERS ============
+
+enum UserRole {
+  ADMIN
+  DOCTOR
+  TECHNICIAN
+  ACCOUNTANT
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         UserRole
+  phone        String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  doctor   Doctor?
+  sessions Session[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============ DOCTORS / TECHNICIANS ============
+
+enum CertificationType {
+  IMPLANT_SURGERY
+  PROSTHETIC
+  ORAL_SURGERY
+  OTHER
+}
+
+model Doctor {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  fullName         String
+  dateOfBirth      DateTime?
+  ethnicity        String   @default("Kinh")
+  nationality      String   @default("Viet Nam")
+  idNumber         String?
+  permanentAddress String?
+  currentAddress   String?
+  phone            String?
+  email            String?
+  bankAccount      String?
+  bankName         String?
+  taxId            String?
+  specialization   String?
+
+  certifications  Certification[]
+  clinicContracts DoctorClinicContract[]
+  treatments      Treatment[]
+  paymentVouchers PaymentVoucher[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Certification {
+  id          String            @id @default(cuid())
+  doctorId    String
+  doctor      Doctor            @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  type        CertificationType
+  name        String
+  issuingBody String?
+  issueDate   DateTime?
+  expiryDate  DateTime?
+  documentUrl String?
+  createdAt   DateTime          @default(now())
+}
+
+// ============ CLINICS ============
+
+model Clinic {
+  id                 String  @id @default(cuid())
+  name               String
+  address            String
+  city               String?
+  phone              String?
+  email              String?
+  representativeName String?
+  representativeRole String? @default("Giam doc")
+  taxId              String?
+  isOutsideHCMC      Boolean @default(false)
+  isActive           Boolean @default(true)
+
+  doctorContracts DoctorClinicContract[]
+  patients        Patient[]
+  invoices        Invoice[]
+  debtRecords     DebtRecord[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ DOCTOR-CLINIC CONTRACTS ============
+
+enum ContractStatus {
+  DRAFT
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+}
+
+model DoctorClinicContract {
+  id                      String         @id @default(cuid())
+  doctorId                String
+  doctor                  Doctor         @relation(fields: [doctorId], references: [id])
+  clinicId                String
+  clinic                  Clinic         @relation(fields: [clinicId], references: [id])
+  contractNumber          String?
+  startDate               DateTime
+  endDate                 DateTime?
+  status                  ContractStatus @default(DRAFT)
+  terminationNoticeMonths Int            @default(6)
+  documentUrl             String?
+
+  feeSchedules FeeSchedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([doctorId, clinicId])
+}
+
+// ============ PROCEDURE TYPES & FEE SCHEDULES ============
+
+enum ProcedureCategory {
+  IMPLANT_PLACEMENT
+  EXTRACTION
+  BONE_GRAFT
+  SINUS_LIFT
+  PROSTHETIC
+  HEALING
+  FULL_ARCH
+  COMPLEX_IMPLANT
+  FOLLOW_UP
+  OTHER
+}
+
+model ProcedureType {
+  id            String            @id @default(cuid())
+  code          String            @unique
+  nameVi        String
+  nameEn        String?
+  category      ProcedureCategory
+  description   String?
+  defaultFeeVND Decimal           @db.Decimal(15, 0)
+  discountRule  Json?
+  isActive      Boolean           @default(true)
+
+  feeSchedules   FeeSchedule[]
+  treatmentSteps TreatmentStep[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FeeSchedule {
+  id              String               @id @default(cuid())
+  contractId      String
+  contract        DoctorClinicContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  procedureTypeId String
+  procedureType   ProcedureType        @relation(fields: [procedureTypeId], references: [id])
+  feeVND          Decimal              @db.Decimal(15, 0)
+  discountRule    Json?
+  notes           String?
+
+  @@unique([contractId, procedureTypeId])
+}
+
+// ============ PATIENTS ============
+
+model Patient {
+  id              String   @id @default(cuid())
+  clinicId        String
+  clinic          Clinic   @relation(fields: [clinicId], references: [id])
+  fullName        String
+  dateOfBirth     DateTime?
+  gender          String?
+  phone           String?
+  medicalNotes    String?
+  clinicPatientId String?
+
+  treatments Treatment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ TREATMENTS ============
+
+enum TreatmentStatus {
+  PLANNING
+  IN_PROGRESS
+  WAITING_HEALING
+  PROSTHETIC_PHASE
+  COMPLETED
+  CANCELLED
+  COMPLICATION
+}
+
+enum TreatmentType {
+  SINGLE_IMPLANT
+  MULTIPLE_IMPLANT
+  ALL_ON_4
+  ALL_ON_5
+  ALL_ON_6
+  EXTRACTION_ONLY
+  BONE_GRAFT_ONLY
+  OTHER
+}
+
+model Treatment {
+  id           String          @id @default(cuid())
+  patientId    String
+  patient      Patient         @relation(fields: [patientId], references: [id])
+  doctorId     String
+  doctor       Doctor          @relation(fields: [doctorId], references: [id])
+  clinicId     String
+  type         TreatmentType
+  status       TreatmentStatus @default(PLANNING)
+  toothNumbers String?
+  implantCount Int             @default(0)
+  archType     String?
+  cbctImageUrl String?
+  xrayImageUrl String?
+  planNotes    String?
+  startDate    DateTime?
+  completionDate DateTime?
+
+  steps TreatmentStep[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ TREATMENT STEPS ============
+
+enum StepStatus {
+  PLANNED
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+  COMPLICATION
+}
+
+model TreatmentStep {
+  id              String        @id @default(cuid())
+  treatmentId     String
+  treatment       Treatment     @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  procedureTypeId String
+  procedureType   ProcedureType @relation(fields: [procedureTypeId], references: [id])
+  stepOrder       Int
+  status          StepStatus    @default(PLANNED)
+  scheduledDate   DateTime?
+  performedDate   DateTime?
+  quantity        Int           @default(1)
+  sequenceIndex   Int           @default(1)
+  unitFeeVND      Decimal       @db.Decimal(15, 0)
+  totalFeeVND     Decimal       @db.Decimal(15, 0)
+  notes           String?
+  toothNumbers    String?
+  doctorSignedOff Boolean       @default(false)
+
+  inventoryUsages StepInventoryUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ INVENTORY ============
+
+enum InventoryCategory {
+  CONSUMABLE
+  REUSABLE
+  TOOL
+  EQUIPMENT
+}
+
+model InventoryItem {
+  id             String            @id @default(cuid())
+  name           String
+  brand          String?
+  category       InventoryCategory
+  specifications Json?
+  lotNumber      String?
+  serialNumber   String?
+  expiryDate     DateTime?
+  unitCostVND    Decimal           @default(0) @db.Decimal(15, 0)
+  currentStock   Int               @default(0)
+  minimumStock   Int               @default(0)
+  unit           String            @default("cai")
+  isActive       Boolean           @default(true)
+
+  usages StepInventoryUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StepInventoryUsage {
+  id              String        @id @default(cuid())
+  treatmentStepId String
+  treatmentStep   TreatmentStep @relation(fields: [treatmentStepId], references: [id], onDelete: Cascade)
+  inventoryItemId String
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  quantityUsed    Decimal       @db.Decimal(10, 2)
+  costVND         Decimal       @db.Decimal(15, 0)
+  notes           String?
+  createdAt       DateTime      @default(now())
+}
+
+// ============ FINANCIAL ============
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  clinicId       String
+  clinic         Clinic        @relation(fields: [clinicId], references: [id])
+  invoiceNumber  String        @unique
+  periodMonth    Int
+  periodYear     Int
+  totalAmountVND Decimal       @db.Decimal(15, 0)
+  status         InvoiceStatus @default(DRAFT)
+  issuedDate     DateTime?
+  dueDate        DateTime?
+  paidDate       DateTime?
+  notes          String?
+
+  lineItems InvoiceLineItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([clinicId, periodMonth, periodYear])
+}
+
+model InvoiceLineItem {
+  id              String  @id @default(cuid())
+  invoiceId       String
+  invoice         Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  treatmentStepId String?
+  description     String
+  quantity        Int
+  unitPriceVND    Decimal @db.Decimal(15, 0)
+  totalVND        Decimal @db.Decimal(15, 0)
+}
+
+enum DebtType {
+  CHARGE
+  PAYMENT
+}
+
+model DebtRecord {
+  id        String   @id @default(cuid())
+  clinicId  String
+  clinic    Clinic   @relation(fields: [clinicId], references: [id])
+  invoiceId String?
+  type      DebtType
+  amountVND Decimal  @db.Decimal(15, 0)
+  date      DateTime
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  PAID
+}
+
+model PaymentVoucher {
+  id                 String        @id @default(cuid())
+  doctorId           String
+  doctor             Doctor        @relation(fields: [doctorId], references: [id])
+  voucherNumber      String        @unique
+  periodMonth        Int
+  periodYear         Int
+  grossAmountVND     Decimal       @db.Decimal(15, 0)
+  taxWithheldVND     Decimal       @db.Decimal(15, 0)
+  travelAllowanceVND Decimal       @default(0) @db.Decimal(15, 0)
+  netAmountVND       Decimal       @db.Decimal(15, 0)
+  status             PaymentStatus @default(PENDING)
+  approvedDate       DateTime?
+  paidDate           DateTime?
+  bankTransferRef    String?
+
+  lineItems VoucherLineItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([doctorId, periodMonth, periodYear])
+}
+
+model VoucherLineItem {
+  id              String         @id @default(cuid())
+  voucherId       String
+  voucher         PaymentVoucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+  treatmentStepId String?
+  clinicName      String
+  patientName     String
+  procedureName   String
+  performedDate   DateTime
+  amountVND       Decimal        @db.Decimal(15, 0)
+}
+
+// ============ DOCUMENTS ============
+
+enum DocType {
+  CONTRACT
+  CONTRACT_APPENDIX
+  PAYMENT_VOUCHER
+  INVOICE
+  TREATMENT_REPORT
+}
+
+model GeneratedDocument {
+  id          String   @id @default(cuid())
+  type        DocType
+  referenceId String
+  fileName    String
+  filePath    String
+  generatedAt DateTime @default(now())
+}

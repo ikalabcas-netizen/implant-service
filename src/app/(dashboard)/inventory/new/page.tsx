@@ -1,0 +1,253 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { INVENTORY_CATEGORY_LABELS } from "@/lib/constants";
+
+export default function NewInventoryItemPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const [name, setName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [category, setCategory] = useState("");
+  const [specifications, setSpecifications] = useState("");
+  const [lotNumber, setLotNumber] = useState("");
+  const [serialNumber, setSerialNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [unitCostVND, setUnitCostVND] = useState("");
+  const [currentStock, setCurrentStock] = useState("");
+  const [minimumStock, setMinimumStock] = useState("");
+  const [unit, setUnit] = useState("cai");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    if (!name.trim() || !category) {
+      setError("Ten va danh muc la bat buoc");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/inventory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          brand: brand.trim() || null,
+          category,
+          specifications: specifications.trim() || null,
+          lotNumber: lotNumber.trim() || null,
+          serialNumber: serialNumber.trim() || null,
+          expiryDate: expiryDate || null,
+          unitCostVND: unitCostVND ? Number(unitCostVND) : 0,
+          currentStock: currentStock ? Number(currentStock) : 0,
+          minimumStock: minimumStock ? Number(minimumStock) : 0,
+          unit: unit.trim() || "cai",
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Loi khi tao vat tu");
+      }
+
+      router.push("/inventory");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Loi khi tao vat tu");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">Them vat tu moi</h1>
+        <p className="text-muted-foreground">
+          Nhap thong tin vat tu de them vao kho
+        </p>
+      </div>
+
+      <Card className="max-w-2xl">
+        <CardHeader>
+          <CardTitle>Thong tin vat tu</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="name">Ten vat tu *</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Nhap ten vat tu"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="brand">Thuong hieu</Label>
+                <Input
+                  id="brand"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  placeholder="VD: Straumann, Nobel..."
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Danh muc *</Label>
+                <Select
+                  value={category}
+                  onValueChange={(v) => setCategory(v ?? "")}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Chon danh muc" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(INVENTORY_CATEGORY_LABELS).map(
+                      ([key, label]) => (
+                        <SelectItem key={key} value={key}>
+                          {label}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="specifications">Thong so ky thuat</Label>
+              <Textarea
+                id="specifications"
+                value={specifications}
+                onChange={(e) => setSpecifications(e.target.value)}
+                placeholder="Kich thuoc, chat lieu, thong so..."
+                rows={3}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="lotNumber">So lo</Label>
+                <Input
+                  id="lotNumber"
+                  value={lotNumber}
+                  onChange={(e) => setLotNumber(e.target.value)}
+                  placeholder="VD: LOT-2024-001"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="serialNumber">So seri</Label>
+                <Input
+                  id="serialNumber"
+                  value={serialNumber}
+                  onChange={(e) => setSerialNumber(e.target.value)}
+                  placeholder="VD: SN-12345"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="expiryDate">Han su dung</Label>
+                <Input
+                  id="expiryDate"
+                  type="date"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="unitCostVND">Don gia (VND)</Label>
+                <Input
+                  id="unitCostVND"
+                  type="number"
+                  min="0"
+                  value={unitCostVND}
+                  onChange={(e) => setUnitCostVND(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="currentStock">Ton kho hien tai</Label>
+                <Input
+                  id="currentStock"
+                  type="number"
+                  min="0"
+                  value={currentStock}
+                  onChange={(e) => setCurrentStock(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="minimumStock">Ton kho toi thieu</Label>
+                <Input
+                  id="minimumStock"
+                  type="number"
+                  min="0"
+                  value={minimumStock}
+                  onChange={(e) => setMinimumStock(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="unit">Don vi</Label>
+                <Input
+                  id="unit"
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                  placeholder="cai"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button type="submit" disabled={loading}>
+                {loading ? "Dang luu..." : "Tao vat tu"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/inventory")}
+              >
+                Huy
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
