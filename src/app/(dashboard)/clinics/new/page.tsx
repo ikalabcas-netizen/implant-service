@@ -14,11 +14,11 @@ import { ArrowLeft, Building2, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 const clinicSchema = z.object({
-  name: z.string().min(1, "Ten phong kham la bat buoc"),
-  address: z.string().min(1, "Dia chi la bat buoc"),
+  name: z.string().min(1, "Tên phòng khám là bắt buộc"),
+  address: z.string().min(1, "Địa chỉ là bắt buộc"),
   city: z.string().optional(),
   phone: z.string().optional(),
-  email: z.string().email("Email khong hop le").optional().or(z.literal("")),
+  email: z.string().email("Email không hợp lệ").optional().or(z.literal("")),
   representativeName: z.string().optional(),
   representativeRole: z.string().optional(),
   taxId: z.string().optional(),
@@ -60,13 +60,13 @@ export default function NewClinicPage() {
 
       if (!response.ok) {
         const result = await response.json();
-        throw new Error(result.error || "Khong the tao phong kham");
+        throw new Error(result.error || "Không thể tạo phòng khám");
       }
 
       router.push("/clinics");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Da xay ra loi");
+      setError(err instanceof Error ? err.message : "Đã xảy ra lỗi");
     } finally {
       setIsSubmitting(false);
     }
@@ -81,9 +81,9 @@ export default function NewClinicPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold">Them phong kham moi</h1>
+          <h1 className="text-2xl font-bold">Thêm phòng khám mới</h1>
           <p className="text-muted-foreground">
-            Nhap thong tin phong kham doi tac
+            Nhập thông tin phòng khám đối tác
           </p>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function NewClinicPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
-            Thong tin phong kham
+            Thông tin phòng khám
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -106,7 +106,7 @@ export default function NewClinicPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="name">
-                  Ten phong kham <span className="text-destructive">*</span>
+                  Tên phòng khám <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
@@ -120,7 +120,7 @@ export default function NewClinicPage() {
 
               <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="address">
-                  Dia chi <span className="text-destructive">*</span>
+                  Địa chỉ <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="address"
@@ -133,7 +133,7 @@ export default function NewClinicPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="city">Thanh pho</Label>
+                <Label htmlFor="city">Thành phố</Label>
                 <Input
                   id="city"
                   placeholder="VD: Ho Chi Minh"
@@ -142,7 +142,7 @@ export default function NewClinicPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Dien thoai</Label>
+                <Label htmlFor="phone">Điện thoại</Label>
                 <Input
                   id="phone"
                   placeholder="VD: 028 1234 5678"
@@ -164,25 +164,25 @@ export default function NewClinicPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="representativeName">Nguoi dai dien</Label>
+                <Label htmlFor="representativeName">Người đại diện</Label>
                 <Input
                   id="representativeName"
-                  placeholder="Ho va ten"
+                  placeholder="Họ và tên"
                   {...register("representativeName")}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="representativeRole">Chuc vu</Label>
+                <Label htmlFor="representativeRole">Chức vụ</Label>
                 <Input
                   id="representativeRole"
-                  placeholder="VD: Giam doc"
+                  placeholder="VD: Giám đốc"
                   {...register("representativeRole")}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="taxId">Ma so thue</Label>
+                <Label htmlFor="taxId">Mã số thuế</Label>
                 <Input
                   id="taxId"
                   placeholder="VD: 0312345678"
@@ -199,7 +199,7 @@ export default function NewClinicPage() {
                   }
                 />
                 <Label htmlFor="isOutsideHCMC" className="cursor-pointer">
-                  Ngoai khu vuc TPHCM
+                  Ngoài khu vực TPHCM
                 </Label>
               </div>
             </div>
@@ -207,11 +207,11 @@ export default function NewClinicPage() {
             <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Tao phong kham
+                Tạo phòng khám
               </Button>
               <Link href="/clinics">
                 <Button type="button" variant="outline">
-                  Huy
+                  Hủy
                 </Button>
               </Link>
             </div>

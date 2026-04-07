@@ -13,9 +13,9 @@ import { ArrowLeft, Loader2, UserPlus } from "lucide-react";
 import Link from "next/link";
 
 const doctorSchema = z.object({
-  fullName: z.string().min(1, "Ho ten la bat buoc"),
-  email: z.string().email("Email khong hop le"),
-  password: z.string().min(6, "Mat khau phai co it nhat 6 ky tu"),
+  fullName: z.string().min(1, "Họ tên là bắt buộc"),
+  email: z.string().email("Email không hợp lệ"),
+  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
   dateOfBirth: z.string().optional(),
   phone: z.string().optional(),
   specialization: z.string().optional(),
@@ -67,13 +67,13 @@ export default function NewDoctorPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        setServerError(err.error || "Co loi xay ra");
+        setServerError(err.error || "Có lỗi xảy ra");
         return;
       }
 
       router.push("/doctors");
     } catch {
-      setServerError("Khong the ket noi den server");
+      setServerError("Không thể kết nối đến server");
     }
   };
 
@@ -84,9 +84,9 @@ export default function NewDoctorPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Them bac si moi</h1>
+          <h1 className="text-2xl font-bold">Thêm bác sĩ mới</h1>
           <p className="text-muted-foreground">
-            Nhap thong tin bac si va tai khoan dang nhap
+            Nhập thông tin bác sĩ và tài khoản đăng nhập
           </p>
         </div>
       </div>
@@ -103,12 +103,12 @@ export default function NewDoctorPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <UserPlus className="h-5 w-5" />
-              Thong tin tai khoan
+              Thông tin tài khoản
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Ho ten *</Label>
+              <Label htmlFor="fullName">Họ tên *</Label>
               <Input
                 id="fullName"
                 placeholder="Nguyen Van A"
@@ -122,7 +122,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email dang nhap *</Label>
+              <Label htmlFor="email">Email đăng nhập *</Label>
               <Input
                 id="email"
                 type="email"
@@ -137,11 +137,11 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Mat khau *</Label>
+              <Label htmlFor="password">Mật khẩu *</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="It nhat 6 ky tu"
+                placeholder="Ít nhất 6 ký tự"
                 {...register("password")}
               />
               {errors.password && (
@@ -152,7 +152,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Dien thoai</Label>
+              <Label htmlFor="phone">Điện thoại</Label>
               <Input
                 id="phone"
                 placeholder="0901234567"
@@ -165,11 +165,11 @@ export default function NewDoctorPage() {
         {/* Personal info */}
         <Card>
           <CardHeader>
-            <CardTitle>Thong tin ca nhan</CardTitle>
+            <CardTitle>Thông tin cá nhân</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Ngay sinh</Label>
+              <Label htmlFor="dateOfBirth">Ngày sinh</Label>
               <Input
                 id="dateOfBirth"
                 type="date"
@@ -178,7 +178,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="specialization">Chuyen khoa</Label>
+              <Label htmlFor="specialization">Chuyên khoa</Label>
               <Input
                 id="specialization"
                 placeholder="Implant, Phau thuat mieng..."
@@ -187,7 +187,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="idNumber">So CMND/CCCD</Label>
+              <Label htmlFor="idNumber">Số CMND/CCCD</Label>
               <Input
                 id="idNumber"
                 placeholder="001234567890"
@@ -196,7 +196,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="taxId">Ma so thue</Label>
+              <Label htmlFor="taxId">Mã số thuế</Label>
               <Input
                 id="taxId"
                 placeholder="0123456789"
@@ -209,11 +209,11 @@ export default function NewDoctorPage() {
         {/* Bank info */}
         <Card>
           <CardHeader>
-            <CardTitle>Thong tin ngan hang</CardTitle>
+            <CardTitle>Thông tin ngân hàng</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="bankAccount">So tai khoan</Label>
+              <Label htmlFor="bankAccount">Số tài khoản</Label>
               <Input
                 id="bankAccount"
                 placeholder="1234567890"
@@ -222,7 +222,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bankName">Ngan hang</Label>
+              <Label htmlFor="bankName">Ngân hàng</Label>
               <Input
                 id="bankName"
                 placeholder="Vietcombank"
@@ -235,11 +235,11 @@ export default function NewDoctorPage() {
         {/* Address */}
         <Card>
           <CardHeader>
-            <CardTitle>Dia chi</CardTitle>
+            <CardTitle>Địa chỉ</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="permanentAddress">Dia chi thuong tru</Label>
+              <Label htmlFor="permanentAddress">Hộ khẩu thường trú</Label>
               <Input
                 id="permanentAddress"
                 placeholder="123 Nguyen Trai, Q.1, TP.HCM"
@@ -248,7 +248,7 @@ export default function NewDoctorPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="currentAddress">Dia chi hien tai</Label>
+              <Label htmlFor="currentAddress">Chỗ ở hiện tại</Label>
               <Input
                 id="currentAddress"
                 placeholder="456 Le Loi, Q.3, TP.HCM"
@@ -260,11 +260,11 @@ export default function NewDoctorPage() {
 
         <div className="flex justify-end gap-3">
           <Button variant="outline" type="button" render={<Link href="/doctors" />}>
-            Huy
+            Hủy
           </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Tao bac si
+            Tạo bác sĩ
           </Button>
         </div>
       </form>

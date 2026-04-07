@@ -41,33 +41,33 @@ interface MenuGroup {
 
 const menuItems: MenuGroup[] = [
   {
-    group: "Tong quan",
+    group: "Tổng quan",
     items: [
       { title: "Dashboard", href: "/", icon: LayoutDashboard, roles: ["*"] },
     ],
   },
   {
-    group: "Quan ly",
+    group: "Quản lý",
     items: [
-      { title: "Bac si / KTV", href: "/doctors", icon: UserRound, roles: ["SUPER_ADMIN", "ADMIN"] },
-      { title: "Phong kham", href: "/clinics", icon: Building2, roles: ["SUPER_ADMIN", "ADMIN"] },
-      { title: "Benh nhan", href: "/patients", icon: Users, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
-      { title: "Ca dieu tri", href: "/treatments", icon: Stethoscope, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
-      { title: "Ton kho", href: "/inventory", icon: Package, roles: ["SUPER_ADMIN", "ADMIN", "WAREHOUSE_STAFF"] },
+      { title: "Bác sĩ / KTV", href: "/doctors", icon: UserRound, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Phòng khám", href: "/clinics", icon: Building2, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Bệnh nhân", href: "/patients", icon: Users, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
+      { title: "Ca điều trị", href: "/treatments", icon: Stethoscope, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
+      { title: "Tồn kho", href: "/inventory", icon: Package, roles: ["SUPER_ADMIN", "ADMIN", "WAREHOUSE_STAFF"] },
     ],
   },
   {
-    group: "Tai chinh",
+    group: "Tài chính",
     items: [
-      { title: "Hoa don & Cong no", href: "/finance", icon: Receipt, roles: ["SUPER_ADMIN", "ADMIN", "ACCOUNTANT"] },
-      { title: "Hop dong", href: "/contracts", icon: FileText, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Hóa đơn & Công nợ", href: "/finance", icon: Receipt, roles: ["SUPER_ADMIN", "ADMIN", "ACCOUNTANT"] },
+      { title: "Hợp đồng", href: "/contracts", icon: FileText, roles: ["SUPER_ADMIN", "ADMIN"] },
     ],
   },
   {
-    group: "He thong",
+    group: "Hệ thống",
     items: [
-      { title: "Quan ly nguoi dung", href: "/users", icon: Shield, roles: ["SUPER_ADMIN", "ADMIN"] },
-      { title: "Cai dat", href: "/settings", icon: Settings, roles: ["SUPER_ADMIN"] },
+      { title: "Quản lý người dùng", href: "/users", icon: Shield, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Cài đặt", href: "/settings", icon: Settings, roles: ["SUPER_ADMIN"] },
     ],
   },
 ];

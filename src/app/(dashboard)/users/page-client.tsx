@@ -85,12 +85,12 @@ export function UsersTableClient({
       });
       if (!res.ok) {
         const err = await res.json();
-        setErrorMsg(err.error || "Co loi xay ra");
+        setErrorMsg(err.error || "Có lỗi xảy ra");
         return;
       }
       router.refresh();
     } catch {
-      setErrorMsg("Khong the ket noi den server");
+      setErrorMsg("Không thể kết nối đến server");
     } finally {
       setLoadingId(null);
     }
@@ -121,12 +121,12 @@ export function UsersTableClient({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Nguoi dung</TableHead>
+            <TableHead>Người dùng</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Vai tro</TableHead>
-            <TableHead>Trang thai</TableHead>
-            <TableHead>Ngay tao</TableHead>
-            <TableHead className="text-right">Thao tac</TableHead>
+            <TableHead>Vai trò</TableHead>
+            <TableHead>Trạng thái</TableHead>
+            <TableHead>Ngày tạo</TableHead>
+            <TableHead className="text-right">Thao tác</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -188,7 +188,7 @@ export function UsersTableClient({
                 <TableCell>
                   {isSelf ? (
                     <Badge variant={user.isActive ? "default" : "secondary"}>
-                      {user.isActive ? "Hoat dong" : "Vo hieu hoa"}
+                      {user.isActive ? "Hoạt động" : "Vô hiệu hóa"}
                     </Badge>
                   ) : (
                     <Button
@@ -199,7 +199,7 @@ export function UsersTableClient({
                         handleToggleActive(user.id, user.isActive)
                       }
                     >
-                      {user.isActive ? "Hoat dong" : "Vo hieu hoa"}
+                      {user.isActive ? "Hoạt động" : "Vô hiệu hóa"}
                     </Button>
                   )}
                 </TableCell>

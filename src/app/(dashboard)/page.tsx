@@ -17,20 +17,20 @@ export default async function DashboardPage() {
     ]);
 
   const stats = [
-    { title: "Bac si / KTV", value: doctorCount, icon: UserRound },
-    { title: "Phong kham", value: clinicCount, icon: Building2 },
-    { title: "Benh nhan", value: patientCount, icon: Users },
-    { title: "Ca dang dieu tri", value: treatmentCount, icon: Stethoscope },
+    { title: "Bác sĩ / KTV", value: doctorCount, icon: UserRound },
+    { title: "Phòng khám", value: clinicCount, icon: Building2 },
+    { title: "Bệnh nhân", value: patientCount, icon: Users },
+    { title: "Ca đang điều trị", value: treatmentCount, icon: Stethoscope },
   ];
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">
-          Xin chao, {session?.user?.name}
+          Xin chào, {session?.user?.name}
         </h1>
         <p className="text-muted-foreground">
-          Tong quan he thong Implant Service Center
+          Tổng quan hệ thống Implant Service Center
         </p>
       </div>
 

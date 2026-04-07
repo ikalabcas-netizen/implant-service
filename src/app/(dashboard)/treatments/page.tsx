@@ -59,12 +59,12 @@ export default async function TreatmentsPage({
         <div>
           <h1 className="text-2xl font-bold">Ca dieu tri</h1>
           <p className="text-muted-foreground">
-            Quan ly cac ca dieu tri implant
+            Quản lý các ca điều trị implant
           </p>
         </div>
         <Button render={<Link href="/treatments/new" />}>
           <Plus data-icon="inline-start" />
-          Tao ca dieu tri
+          Tạo ca điều trị
         </Button>
       </div>
 
@@ -75,7 +75,7 @@ export default async function TreatmentsPage({
           size="sm"
           render={<Link href="/treatments" />}
         >
-          Tat ca
+          Tất cả
         </Button>
         {statuses.map(([key, label]) => (
           <Button
@@ -91,12 +91,12 @@ export default async function TreatmentsPage({
 
       <Card>
         <CardHeader>
-          <CardTitle>Danh sach ca dieu tri ({treatments.length})</CardTitle>
+          <CardTitle>Danh sách ca điều trị ({treatments.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {treatments.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co ca dieu tri nao.
+              Chưa có ca điều trị nào.
             </p>
           ) : (
             <Table>

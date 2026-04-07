@@ -33,23 +33,23 @@ export default async function PatientsPage() {
         <div>
           <h1 className="text-2xl font-bold">Benh nhan</h1>
           <p className="text-muted-foreground">
-            Quan ly danh sach benh nhan trong he thong
+            Quản lý danh sách bệnh nhân trong hệ thống
           </p>
         </div>
         <Button render={<Link href="/patients/new" />}>
           <Plus data-icon="inline-start" />
-          Them benh nhan
+          Thêm bệnh nhân
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Danh sach benh nhan ({patients.length})</CardTitle>
+          <CardTitle>Danh sách bệnh nhân ({patients.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {patients.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co benh nhan nao. Hay them benh nhan moi.
+              Chưa có bệnh nhân nào. Hay them benh nhan moi.
             </p>
           ) : (
             <Table>
@@ -59,7 +59,7 @@ export default async function PatientsPage() {
                   <TableHead>Phong kham</TableHead>
                   <TableHead>Dien thoai</TableHead>
                   <TableHead>Gioi tinh</TableHead>
-                  <TableHead className="text-center">So ca dieu tri</TableHead>
+                  <TableHead className="text-center">Số ca điều trị</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -43,7 +43,7 @@ export default function NewPatientPage() {
           setClinics(data);
         }
       } catch {
-        console.error("Khong the tai danh sach phong kham");
+        console.error("Không thể tải danh sách phòng khám");
       }
     }
     fetchClinics();
@@ -54,7 +54,7 @@ export default function NewPatientPage() {
     setError("");
 
     if (!fullName.trim() || !clinicId) {
-      setError("Ho ten va phong kham la bat buoc");
+      setError("Họ tên và phòng khám là bắt buộc");
       return;
     }
 
@@ -76,12 +76,12 @@ export default function NewPatientPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Loi khi tao benh nhan");
+        throw new Error(data.error || "Lỗi khi tạo bệnh nhân");
       }
 
       router.push("/patients");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Loi khi tao benh nhan");
+      setError(err instanceof Error ? err.message : "Lỗi khi tạo bệnh nhân");
     } finally {
       setLoading(false);
     }
@@ -90,15 +90,15 @@ export default function NewPatientPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Them benh nhan moi</h1>
+        <h1 className="text-2xl font-bold">Thêm bệnh nhân mới</h1>
         <p className="text-muted-foreground">
-          Nhap thong tin benh nhan de them vao he thong
+          Nhập thông tin bệnh nhân để thêm vào hệ thống
         </p>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Thong tin benh nhan</CardTitle>
+          <CardTitle>Thông tin bệnh nhân</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -109,21 +109,21 @@ export default function NewPatientPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="fullName">Ho ten *</Label>
+              <Label htmlFor="fullName">Họ tên *</Label>
               <Input
                 id="fullName"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Nhap ho ten benh nhan"
+                placeholder="Nhập họ tên bệnh nhân"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Phong kham *</Label>
+              <Label>Phòng khám *</Label>
               <Select value={clinicId} onValueChange={(v) => setClinicId(v ?? "")}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chon phong kham" />
+                  <SelectValue placeholder="Chọn phòng khám" />
                 </SelectTrigger>
                 <SelectContent>
                   {clinics.map((clinic) => (
@@ -137,7 +137,7 @@ export default function NewPatientPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="dateOfBirth">Ngay sinh</Label>
+                <Label htmlFor="dateOfBirth">Ngày sinh</Label>
                 <Input
                   id="dateOfBirth"
                   type="date"
@@ -147,14 +147,14 @@ export default function NewPatientPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Gioi tinh</Label>
+                <Label>Giới tính</Label>
                 <Select value={gender} onValueChange={(v) => setGender(v ?? "")}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Chon gioi tinh" />
+                    <SelectValue placeholder="Chọn giới tính" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Nam">Nam</SelectItem>
-                    <SelectItem value="Nu">Nu</SelectItem>
+                    <SelectItem value="Nu">Nữ</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -162,7 +162,7 @@ export default function NewPatientPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="phone">Dien thoai</Label>
+                <Label htmlFor="phone">Điện thoại</Label>
                 <Input
                   id="phone"
                   value={phone}
@@ -172,37 +172,37 @@ export default function NewPatientPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="clinicPatientId">Ma benh nhan (PK)</Label>
+                <Label htmlFor="clinicPatientId">Mã bệnh nhân (PK)</Label>
                 <Input
                   id="clinicPatientId"
                   value={clinicPatientId}
                   onChange={(e) => setClinicPatientId(e.target.value)}
-                  placeholder="Ma benh nhan tai phong kham"
+                  placeholder="Mã bệnh nhân tại phòng khám"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="medicalNotes">Ghi chu y khoa</Label>
+              <Label htmlFor="medicalNotes">Ghi chú y khoa</Label>
               <Textarea
                 id="medicalNotes"
                 value={medicalNotes}
                 onChange={(e) => setMedicalNotes(e.target.value)}
-                placeholder="Tien su benh ly, di ung, ghi chu..."
+                placeholder="Tiền sử bệnh lý, dị ứng, ghi chú..."
                 rows={4}
               />
             </div>
 
             <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={loading}>
-                {loading ? "Dang luu..." : "Tao benh nhan"}
+                {loading ? "Đang lưu..." : "Tạo bệnh nhân"}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/patients")}
               >
-                Huy
+                Hủy
               </Button>
             </div>
           </form>

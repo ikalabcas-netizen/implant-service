@@ -15,10 +15,10 @@ import { Plus, FileText } from "lucide-react";
 import type { ContractStatus } from "@prisma/client";
 
 const CONTRACT_STATUS_LABELS: Record<ContractStatus, string> = {
-  DRAFT: "Nhap",
-  ACTIVE: "Hoat dong",
-  SUSPENDED: "Tam ngung",
-  TERMINATED: "Da cham dut",
+  DRAFT: "Nháp",
+  ACTIVE: "Hoạt động",
+  SUSPENDED: "Tạm ngừng",
+  TERMINATED: "Đã chấm dứt",
 };
 
 const CONTRACT_STATUS_VARIANT: Record<
@@ -51,14 +51,14 @@ export default async function ContractsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Quan ly hop dong</h1>
+          <h1 className="text-2xl font-bold">Quản lý hợp đồng</h1>
           <p className="text-muted-foreground">
-            Hop dong giua bac si va phong kham
+            Hợp đồng giữa bác sĩ và phòng khám
           </p>
         </div>
         <Button render={<Link href="/contracts/new" />}>
           <Plus data-icon="inline-start" />
-          Tao hop dong
+          Tạo hợp đồng
         </Button>
       </div>
 
@@ -66,13 +66,13 @@ export default async function ContractsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Hop dong ({contracts.length})
+            Hợp đồng ({contracts.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {contracts.length === 0 ? (
             <p className="text-center py-8 text-muted-foreground">
-              Chua co hop dong nao trong he thong.
+              Chưa có hợp đồng nào trong hệ thống.
             </p>
           ) : (
             <Table>
@@ -80,10 +80,10 @@ export default async function ContractsPage() {
                 <TableRow>
                   <TableHead>Bac si</TableHead>
                   <TableHead>Phong kham</TableHead>
-                  <TableHead>So hop dong</TableHead>
+                  <TableHead>Số hợp đồng</TableHead>
                   <TableHead>Ngay bat dau</TableHead>
                   <TableHead>Trang thai</TableHead>
-                  <TableHead className="text-center">Bang phi</TableHead>
+                  <TableHead className="text-center">Bảng phí</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

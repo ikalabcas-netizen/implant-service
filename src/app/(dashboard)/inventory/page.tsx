@@ -66,14 +66,14 @@ export default async function InventoryPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Kho vat tu</h1>
+          <h1 className="text-2xl font-bold">Kho vật tư</h1>
           <p className="text-muted-foreground">
-            Quan ly vat tu, dung cu, thiet bi y te
+            Quản lý vật tư, dụng cụ, thiết bị y tế
           </p>
         </div>
         <Button render={<Link href="/inventory/new" />}>
           <Plus data-icon="inline-start" />
-          Them vat tu
+          Thêm vật tư
         </Button>
       </div>
 
@@ -81,7 +81,7 @@ export default async function InventoryPage({
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Tong vat tu</CardTitle>
+            <CardTitle className="text-sm font-medium">Tổng vật tư</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -91,7 +91,7 @@ export default async function InventoryPage({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Sap het hang</CardTitle>
+            <CardTitle className="text-sm font-medium">Sắp hết hàng</CardTitle>
             <AlertTriangle className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
@@ -103,7 +103,7 @@ export default async function InventoryPage({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Vat tu tieu hao</CardTitle>
+            <CardTitle className="text-sm font-medium">Vật tư tiêu hao</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -113,7 +113,7 @@ export default async function InventoryPage({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Dung cu & Thiet bi</CardTitle>
+            <CardTitle className="text-sm font-medium">Dụng cụ & Thiết bị</CardTitle>
             <Wrench className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -130,31 +130,31 @@ export default async function InventoryPage({
       <Tabs defaultValue={filterCategory || "ALL"}>
         <TabsList>
           <TabsTrigger value="ALL" render={<Link href="/inventory" />}>
-            Tat ca ({totalItems})
+            Tất cả ({totalItems})
           </TabsTrigger>
           <TabsTrigger
             value="CONSUMABLE"
             render={<Link href="/inventory?category=CONSUMABLE" />}
           >
-            Tieu hao ({categoryCounts.CONSUMABLE})
+            Tiêu hao ({categoryCounts.CONSUMABLE})
           </TabsTrigger>
           <TabsTrigger
             value="REUSABLE"
             render={<Link href="/inventory?category=REUSABLE" />}
           >
-            Tai su dung ({categoryCounts.REUSABLE})
+            Tái sử dụng ({categoryCounts.REUSABLE})
           </TabsTrigger>
           <TabsTrigger
             value="TOOL"
             render={<Link href="/inventory?category=TOOL" />}
           >
-            Dung cu ({categoryCounts.TOOL})
+            Dụng cụ ({categoryCounts.TOOL})
           </TabsTrigger>
           <TabsTrigger
             value="EQUIPMENT"
             render={<Link href="/inventory?category=EQUIPMENT" />}
           >
-            Thiet bi ({categoryCounts.EQUIPMENT})
+            Thiết bị ({categoryCounts.EQUIPMENT})
           </TabsTrigger>
         </TabsList>
       </Tabs>
@@ -163,13 +163,13 @@ export default async function InventoryPage({
       <Card>
         <CardHeader>
           <CardTitle>
-            Danh sach vat tu ({filteredItems.length})
+            Danh sách vật tư ({filteredItems.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {filteredItems.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co vat tu nao. Hay them vat tu moi.
+              Chưa có vật tư nào. Hay them vat tu moi.
             </p>
           ) : (
             <Table>
@@ -179,10 +179,10 @@ export default async function InventoryPage({
                   <TableHead>Thuong hieu</TableHead>
                   <TableHead>Danh muc</TableHead>
                   <TableHead>So lo</TableHead>
-                  <TableHead className="text-right">Ton kho</TableHead>
+                  <TableHead className="text-right">Tồn kho</TableHead>
                   <TableHead className="text-right">Don gia</TableHead>
                   <TableHead>Don vi</TableHead>
-                  <TableHead>Han su dung</TableHead>
+                  <TableHead>Hạn sử dụng</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

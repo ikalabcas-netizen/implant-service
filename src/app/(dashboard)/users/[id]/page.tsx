@@ -68,9 +68,9 @@ export default async function UserDetailPage({
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold">Chi tiet nguoi dung</h1>
+          <h1 className="text-2xl font-bold">Chi tiết người dùng</h1>
           <p className="text-muted-foreground">
-            Xem va cap nhat thong tin nguoi dung
+            Xem và cập nhật thông tin người dùng
           </p>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default async function UserDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Thong tin nguoi dung
+            Thông tin người dùng
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -96,7 +96,7 @@ export default async function UserDetailPage({
               <div className="space-y-1">
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <User className="h-4 w-4" />
-                  Ho ten
+                  Họ tên
                 </div>
                 <div className="text-sm font-medium">{user.name}</div>
               </div>
@@ -110,23 +110,23 @@ export default async function UserDetailPage({
               </div>
 
               <div className="space-y-1">
-                <div className="text-sm text-muted-foreground">Vai tro</div>
+                <div className="text-sm text-muted-foreground">Vai trò</div>
                 <Badge className={ROLE_BADGE_COLORS[user.role] || ""}>
                   {ROLE_LABELS[user.role] || user.role}
                 </Badge>
               </div>
 
               <div className="space-y-1">
-                <div className="text-sm text-muted-foreground">Trang thai</div>
+                <div className="text-sm text-muted-foreground">Trạng thái</div>
                 <Badge variant={user.isActive ? "default" : "secondary"}>
-                  {user.isActive ? "Hoat dong" : "Vo hieu hoa"}
+                  {user.isActive ? "Hoạt động" : "Vô hiệu hóa"}
                 </Badge>
               </div>
 
               <div className="space-y-1">
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Calendar className="h-4 w-4" />
-                  Ngay tham gia
+                  Ngày tham gia
                 </div>
                 <div className="text-sm font-medium">
                   {formatDate(user.createdAt)}
@@ -137,7 +137,7 @@ export default async function UserDetailPage({
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <Stethoscope className="h-4 w-4" />
-                    Ho so bac si
+                    Hồ sơ bác sĩ
                   </div>
                   <Button
                     variant="link"
@@ -145,7 +145,7 @@ export default async function UserDetailPage({
                     className="h-auto p-0"
                     render={<Link href={`/doctors/${user.doctor.id}`} />}
                   >
-                    Xem ho so bac si
+                    Xem hồ sơ bác sĩ
                   </Button>
                 </div>
               )}

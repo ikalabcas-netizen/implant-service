@@ -35,14 +35,14 @@ export default async function DoctorsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Danh sach bac si</h1>
+          <h1 className="text-2xl font-bold">Danh sách bác sĩ</h1>
           <p className="text-muted-foreground">
-            Quan ly thong tin bac si trong he thong
+            Quản lý thông tin bác sĩ trong hệ thống
           </p>
         </div>
         <Button render={<Link href="/doctors/new" />}>
           <Plus data-icon="inline-start" />
-          Them bac si
+          Thêm bác sĩ
         </Button>
       </div>
 
@@ -50,24 +50,24 @@ export default async function DoctorsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Stethoscope className="h-5 w-5" />
-            Bac si ({doctors.length})
+            Bác sĩ ({doctors.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {doctors.length === 0 ? (
             <p className="text-center py-8 text-muted-foreground">
-              Chua co bac si nao trong he thong.
+              Chưa có bác sĩ nào trong hệ thống.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ho ten</TableHead>
-                  <TableHead>Chuyen khoa</TableHead>
-                  <TableHead>Dien thoai</TableHead>
+                  <TableHead>Họ tên</TableHead>
+                  <TableHead>Chuyên khoa</TableHead>
+                  <TableHead>Điện thoại</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead className="text-center">Chung chi</TableHead>
-                  <TableHead>Trang thai</TableHead>
+                  <TableHead className="text-center">Chứng chỉ</TableHead>
+                  <TableHead>Trạng thái</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -97,7 +97,7 @@ export default async function DoctorsPage() {
                     </TableCell>
                     <TableCell>
                       {doctor.user.isActive ? (
-                        <Badge variant="default">Hoat dong</Badge>
+                        <Badge variant="default">Hoạt động</Badge>
                       ) : (
                         <Badge variant="secondary">Ngung</Badge>
                       )}

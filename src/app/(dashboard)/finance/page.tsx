@@ -21,11 +21,11 @@ import {
 } from "lucide-react";
 
 const INVOICE_STATUS_LABELS: Record<string, string> = {
-  DRAFT: "Nhap",
-  ISSUED: "Da phat hanh",
-  PARTIALLY_PAID: "Thanh toan 1 phan",
-  PAID: "Da thanh toan",
-  OVERDUE: "Qua han",
+  DRAFT: "Nháp",
+  ISSUED: "Đã phát hành",
+  PARTIALLY_PAID: "Thanh toán 1 phần",
+  PAID: "Đã thanh toán",
+  OVERDUE: "Quá hạn",
 };
 
 const INVOICE_STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -37,9 +37,9 @@ const INVOICE_STATUS_VARIANT: Record<string, "default" | "secondary" | "destruct
 };
 
 const PAYMENT_STATUS_LABELS: Record<string, string> = {
-  PENDING: "Cho duyet",
-  APPROVED: "Da duyet",
-  PAID: "Da chi",
+  PENDING: "Chờ duyệt",
+  APPROVED: "Đã duyệt",
+  PAID: "Đã chi",
 };
 
 const PAYMENT_STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -116,9 +116,9 @@ export default async function FinancePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Tai chinh</h1>
+        <h1 className="text-2xl font-bold">Tài chính</h1>
         <p className="text-muted-foreground">
-          Tong quan hoa don, chi tra bac si va cong no phong kham
+          Tổng quan hóa đơn, chi trả bác sĩ và công nợ phòng khám
         </p>
       </div>
 
@@ -126,20 +126,20 @@ export default async function FinancePage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Tong doanh thu</CardTitle>
+            <CardTitle className="text-sm font-medium">Tổng doanh thu</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatVND(totalRevenue)}</div>
             <p className="text-xs text-muted-foreground">
-              Tong gia tri hoa don da phat hanh
+              Tổng giá trị hóa đơn đã phát hành
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Cong no ton dong</CardTitle>
+            <CardTitle className="text-sm font-medium">Công nợ tồn đọng</CardTitle>
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -147,20 +147,20 @@ export default async function FinancePage() {
               {formatVND(outstandingDebt)}
             </div>
             <p className="text-xs text-muted-foreground">
-              Tong no chua thanh toan cua phong kham
+              Tổng nợ chưa thanh toán của phòng khám
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Chi tra bac si cho duyet</CardTitle>
+            <CardTitle className="text-sm font-medium">Chi trả bác sĩ chờ duyệt</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatVND(pendingPaymentsTotal)}</div>
             <p className="text-xs text-muted-foreground">
-              Phieu chi cho duyet hoac cho thanh toan
+              Phiếu chi chờ duyệt hoặc chờ thanh toán
             </p>
           </CardContent>
         </Card>
@@ -170,41 +170,41 @@ export default async function FinancePage() {
       <div className="flex flex-wrap gap-3">
         <Button render={<Link href="/finance/invoices" />}>
           <FileText data-icon="inline-start" />
-          Hoa don
+          Hóa đơn
         </Button>
         <Button variant="outline" render={<Link href="/finance/payments" />}>
           <CreditCard data-icon="inline-start" />
-          Phieu chi bac si
+          Phiếu chi bác sĩ
         </Button>
         <Button variant="outline" render={<Link href="/finance/debts" />}>
           <AlertTriangle data-icon="inline-start" />
-          Cong no
+          Công nợ
         </Button>
       </div>
 
       {/* Recent invoices */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Hoa don gan day</CardTitle>
+          <CardTitle>Hóa đơn gần đây</CardTitle>
           <Button variant="ghost" size="sm" render={<Link href="/finance/invoices" />}>
-            Xem tat ca
+            Xem tất cả
             <ArrowRight data-icon="inline-end" />
           </Button>
         </CardHeader>
         <CardContent>
           {recentInvoices.length === 0 ? (
             <p className="text-center text-muted-foreground py-6">
-              Chua co hoa don nao.
+              Chưa có hóa đơn nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ma hoa don</TableHead>
-                  <TableHead>Phong kham</TableHead>
-                  <TableHead>Ky</TableHead>
-                  <TableHead className="text-right">So tien</TableHead>
-                  <TableHead>Trang thai</TableHead>
+                  <TableHead>Mã hóa đơn</TableHead>
+                  <TableHead>Phòng khám</TableHead>
+                  <TableHead>Kỳ</TableHead>
+                  <TableHead className="text-right">Số tiền</TableHead>
+                  <TableHead>Trạng thái</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -241,26 +241,26 @@ export default async function FinancePage() {
       {/* Recent payment vouchers */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Phieu chi bac si gan day</CardTitle>
+          <CardTitle>Phiếu chi bác sĩ gần đây</CardTitle>
           <Button variant="ghost" size="sm" render={<Link href="/finance/payments" />}>
-            Xem tat ca
+            Xem tất cả
             <ArrowRight data-icon="inline-end" />
           </Button>
         </CardHeader>
         <CardContent>
           {recentVouchers.length === 0 ? (
             <p className="text-center text-muted-foreground py-6">
-              Chua co phieu chi nao.
+              Chưa có phiếu chi nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ma phieu</TableHead>
-                  <TableHead>Bac si</TableHead>
-                  <TableHead>Ky</TableHead>
-                  <TableHead className="text-right">Thuc nhan</TableHead>
-                  <TableHead>Trang thai</TableHead>
+                  <TableHead>Mã phiếu</TableHead>
+                  <TableHead>Bác sĩ</TableHead>
+                  <TableHead>Kỳ</TableHead>
+                  <TableHead className="text-right">Thực nhận</TableHead>
+                  <TableHead>Trạng thái</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

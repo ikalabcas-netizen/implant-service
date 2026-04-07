@@ -18,7 +18,7 @@ export default function LoginPage() {
                 Implant Service Center
               </h1>
               <p className="text-sm text-muted-foreground">
-                He thong quan ly dich vu Implant
+                Hệ thống quản lý dịch vụ Implant
               </p>
             </div>
           </div>
@@ -46,12 +46,12 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            Dang nhap voi Google
+            Đăng nhập với Google
           </button>
 
           {/* Footer text */}
           <p className="text-center text-xs text-muted-foreground">
-            Lien he quan tri vien de duoc cap quyen truy cap
+            Liên hệ quản trị viên để được cấp quyền truy cập
           </p>
         </div>
       </div>

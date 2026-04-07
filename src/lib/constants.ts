@@ -3,11 +3,11 @@ export const PIT_RATE = 0.1; // 10% Personal Income Tax
 
 export const ROLE_LABELS: Record<string, string> = {
   SUPER_ADMIN: "Super Admin",
-  ADMIN: "Quan tri vien",
-  DOCTOR: "Bac si",
-  WAREHOUSE_STAFF: "Nhan vien kho",
-  ACCOUNTANT: "Ke toan",
-  CUSTOMER: "Khach hang",
+  ADMIN: "Quản trị viên",
+  DOCTOR: "Bác sĩ",
+  WAREHOUSE_STAFF: "Nhân viên kho",
+  ACCOUNTANT: "Kế toán",
+  CUSTOMER: "Khách hàng",
 };
 
 export const ROLE_BADGE_COLORS: Record<string, string> = {
@@ -20,51 +20,51 @@ export const ROLE_BADGE_COLORS: Record<string, string> = {
 };
 
 export const TREATMENT_STATUS_LABELS: Record<string, string> = {
-  PLANNING: "Lap ke hoach",
-  IN_PROGRESS: "Dang dieu tri",
-  WAITING_HEALING: "Cho lanh thuong",
-  PROSTHETIC_PHASE: "Phuc hinh",
-  COMPLETED: "Hoan thanh",
-  CANCELLED: "Da huy",
-  COMPLICATION: "Bien chung",
+  PLANNING: "Lập kế hoạch",
+  IN_PROGRESS: "Đang điều trị",
+  WAITING_HEALING: "Chờ lành thương",
+  PROSTHETIC_PHASE: "Phục hình",
+  COMPLETED: "Hoàn thành",
+  CANCELLED: "Đã hủy",
+  COMPLICATION: "Biến chứng",
 };
 
 export const TREATMENT_TYPE_LABELS: Record<string, string> = {
-  SINGLE_IMPLANT: "Implant don le",
-  MULTIPLE_IMPLANT: "Nhieu implant",
+  SINGLE_IMPLANT: "Implant đơn lẻ",
+  MULTIPLE_IMPLANT: "Nhiều implant",
   ALL_ON_4: "All-on-4",
   ALL_ON_5: "All-on-5",
   ALL_ON_6: "All-on-6",
-  EXTRACTION_ONLY: "Chi nho rang",
-  BONE_GRAFT_ONLY: "Chi ghep xuong",
-  OTHER: "Khac",
+  EXTRACTION_ONLY: "Chỉ nhổ răng",
+  BONE_GRAFT_ONLY: "Chỉ ghép xương",
+  OTHER: "Khác",
 };
 
 export const STEP_STATUS_LABELS: Record<string, string> = {
-  PLANNED: "Du kien",
-  SCHEDULED: "Da dat lich",
-  IN_PROGRESS: "Dang thuc hien",
-  COMPLETED: "Hoan thanh",
-  SKIPPED: "Bo qua",
-  COMPLICATION: "Bien chung",
+  PLANNED: "Dự kiến",
+  SCHEDULED: "Đã đặt lịch",
+  IN_PROGRESS: "Đang thực hiện",
+  COMPLETED: "Hoàn thành",
+  SKIPPED: "Bỏ qua",
+  COMPLICATION: "Biến chứng",
 };
 
 export const INVENTORY_CATEGORY_LABELS: Record<string, string> = {
-  CONSUMABLE: "Vat tu tieu hao",
-  REUSABLE: "Vat tu tai su dung",
-  TOOL: "Dung cu",
-  EQUIPMENT: "Thiet bi",
+  CONSUMABLE: "Vật tư tiêu hao",
+  REUSABLE: "Vật tư tái sử dụng",
+  TOOL: "Dụng cụ",
+  EQUIPMENT: "Thiết bị",
 };
 
 export const PROCEDURE_CATEGORY_LABELS: Record<string, string> = {
-  IMPLANT_PLACEMENT: "Cam implant",
-  EXTRACTION: "Nho rang",
-  BONE_GRAFT: "Ghep xuong",
-  SINUS_LIFT: "Nang xoang",
-  PROSTHETIC: "Phuc hinh",
-  HEALING: "Lanh thuong",
-  FULL_ARCH: "Toan ham",
-  COMPLEX_IMPLANT: "Implant phuc tap",
-  FOLLOW_UP: "Tai kham",
-  OTHER: "Khac",
+  IMPLANT_PLACEMENT: "Cắm implant",
+  EXTRACTION: "Nhổ răng",
+  BONE_GRAFT: "Ghép xương",
+  SINUS_LIFT: "Nâng xoang",
+  PROSTHETIC: "Phục hình",
+  HEALING: "Lành thương",
+  FULL_ARCH: "Toàn hàm",
+  COMPLEX_IMPLANT: "Implant phức tạp",
+  FOLLOW_UP: "Tái khám",
+  OTHER: "Khác",
 };

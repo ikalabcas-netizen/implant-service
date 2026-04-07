@@ -35,7 +35,7 @@ export default async function SettingsPage() {
         <div>
           <h1 className="text-2xl font-bold">Cai dat</h1>
           <p className="text-muted-foreground">
-            Quan ly loai thu thuat va bang gia mac dinh
+            Quản lý loại thủ thuật và bảng giá mặc định
           </p>
         </div>
       </div>
@@ -44,7 +44,7 @@ export default async function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <ListChecks className="h-5 w-5" />
-            Danh muc thu thuat ({procedureTypes.length} loai)
+            Danh mục thủ thuật ({procedureTypes.length} loai)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -57,10 +57,10 @@ export default async function SettingsPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[120px]">Ma</TableHead>
-                    <TableHead>Ten thu thuat</TableHead>
+                    <TableHead>Tên thủ thuật</TableHead>
                     <TableHead>Ten tieng Anh</TableHead>
-                    <TableHead className="text-right">Gia mac dinh</TableHead>
-                    <TableHead>Quy tac giam gia</TableHead>
+                    <TableHead className="text-right">Giá mặc định</TableHead>
+                    <TableHead>Quy tắc giảm giá</TableHead>
                     <TableHead>Trang thai</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -80,7 +80,7 @@ export default async function SettingsPage() {
                       <TableCell>
                         {pt.discountRule ? (
                           <Badge variant="outline" className="text-xs">
-                            Co giam gia
+                            Có giảm giá
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground text-xs">-</span>
@@ -88,7 +88,7 @@ export default async function SettingsPage() {
                       </TableCell>
                       <TableCell>
                         <Badge variant={pt.isActive ? "default" : "secondary"}>
-                          {pt.isActive ? "Hoat dong" : "Tam ngung"}
+                          {pt.isActive ? "Hoạt động" : "Tạm ngừng"}
                         </Badge>
                       </TableCell>
                     </TableRow>

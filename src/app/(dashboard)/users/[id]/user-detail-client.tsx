@@ -60,13 +60,13 @@ export function UserDetailClient({
       });
       if (!res.ok) {
         const err = await res.json();
-        setErrorMsg(err.error || "Co loi xay ra");
+        setErrorMsg(err.error || "Có lỗi xảy ra");
         return;
       }
-      setSuccessMsg("Cap nhat thanh cong");
+      setSuccessMsg("Cập nhật thành công");
       router.refresh();
     } catch {
-      setErrorMsg("Khong the ket noi den server");
+      setErrorMsg("Không thể kết nối đến server");
     } finally {
       setLoading(false);
     }
@@ -99,13 +99,13 @@ export function UserDetailClient({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            Thay doi vai tro
+            Thay đổi vai trò
           </CardTitle>
         </CardHeader>
         <CardContent>
           {isSelf ? (
             <p className="text-sm text-muted-foreground">
-              Ban khong the thay doi vai tro cua chinh minh.
+              Bạn không thể thay đổi vai trò của chính mình.
             </p>
           ) : (
             <div className="flex items-center gap-4">
@@ -126,7 +126,7 @@ export function UserDetailClient({
                 </SelectContent>
               </Select>
               <span className="text-sm text-muted-foreground">
-                Chon vai tro moi cho nguoi dung
+                Chọn vai trò mới cho người dùng
               </span>
             </div>
           )}
@@ -138,13 +138,13 @@ export function UserDetailClient({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Power className="h-5 w-5" />
-            Trang thai tai khoan
+            Trạng thái tài khoản
           </CardTitle>
         </CardHeader>
         <CardContent>
           {isSelf ? (
             <p className="text-sm text-muted-foreground">
-              Ban khong the vo hieu hoa tai khoan cua chinh minh.
+              Bạn không thể vô hiệu hóa tài khoản của chính mình.
             </p>
           ) : (
             <div className="flex items-center gap-4">
@@ -153,12 +153,12 @@ export function UserDetailClient({
                 disabled={loading}
                 onClick={handleToggleActive}
               >
-                {currentIsActive ? "Vo hieu hoa tai khoan" : "Kich hoat tai khoan"}
+                {currentIsActive ? "Vô hiệu hóa tài khoản" : "Kích hoạt tài khoản"}
               </Button>
               <span className="text-sm text-muted-foreground">
                 {currentIsActive
-                  ? "Tai khoan dang hoat dong. Bam de vo hieu hoa."
-                  : "Tai khoan da bi vo hieu hoa. Bam de kich hoat lai."}
+                  ? "Tài khoản đang hoạt động. Bấm để vô hiệu hóa."
+                  : "Tài khoản đã bị vô hiệu hóa. Bấm để kích hoạt lại."}
               </span>
             </div>
           )}

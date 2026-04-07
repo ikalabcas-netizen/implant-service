@@ -35,13 +35,13 @@ export default async function ClinicsPage() {
         <div>
           <h1 className="text-2xl font-bold">Phong kham</h1>
           <p className="text-muted-foreground">
-            Quan ly danh sach phong kham doi tac
+            Quản lý danh sách phòng khám đối tác
           </p>
         </div>
         <Link href="/clinics/new">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Them phong kham
+            Thêm phòng khám
           </Button>
         </Link>
       </div>
@@ -50,18 +50,18 @@ export default async function ClinicsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
-            Danh sach phong kham ({clinics.length})
+            Danh sách phòng khám ({clinics.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Ten phong kham</TableHead>
+                <TableHead>Tên phòng khám</TableHead>
                 <TableHead>Dia chi</TableHead>
                 <TableHead>Thanh pho</TableHead>
-                <TableHead>Dien thoai</TableHead>
-                <TableHead>Nguoi dai dien</TableHead>
+                <TableHead>Điện thoại</TableHead>
+                <TableHead>Người đại diện</TableHead>
                 <TableHead className="text-center">Benh nhan</TableHead>
                 <TableHead className="text-center">Khu vuc</TableHead>
               </TableRow>
@@ -70,7 +70,7 @@ export default async function ClinicsPage() {
               {clinics.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
-                    Chua co phong kham nao. Nhan &quot;Them phong kham&quot; de bat dau.
+                    Chưa có phòng khám nào. Nhan &quot;Thêm phòng khám&quot; de bat dau.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -110,7 +110,7 @@ export default async function ClinicsPage() {
                     </TableCell>
                     <TableCell className="text-center">
                       {clinic.isOutsideHCMC ? (
-                        <Badge variant="secondary">Ngoai TPHCM</Badge>
+                        <Badge variant="secondary">Ngoài TPHCM</Badge>
                       ) : (
                         <Badge>TPHCM</Badge>
                       )}

@@ -35,9 +35,9 @@ export default async function UsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Quan ly nguoi dung</h1>
+        <h1 className="text-2xl font-bold">Quản lý người dùng</h1>
         <p className="text-muted-foreground">
-          Quan ly tai khoan va phan quyen nguoi dung trong he thong
+          Quản lý tài khoản và phân quyền người dùng trong hệ thống
         </p>
       </div>
 
@@ -45,13 +45,13 @@ export default async function UsersPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Nguoi dung ({users.length})
+            Người dùng ({users.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {users.length === 0 ? (
             <p className="text-center py-8 text-muted-foreground">
-              Chua co nguoi dung nao trong he thong.
+              Chưa có người dùng nào trong hệ thống.
             </p>
           ) : (
             <UsersTableClient
