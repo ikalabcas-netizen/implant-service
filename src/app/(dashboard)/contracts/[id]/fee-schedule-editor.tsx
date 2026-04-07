@@ -10,7 +10,7 @@ import { formatVND } from "@/lib/fee-calculator";
 
 interface FeeScheduleEditorProps {
   contractId: string;
-  procedureTypeId: string;
+  catalogItemId: string;
   procedureName: string;
   procedureCode: string;
   defaultFeeVND: number;
@@ -20,7 +20,7 @@ interface FeeScheduleEditorProps {
 
 export function FeeScheduleEditor({
   contractId,
-  procedureTypeId,
+  catalogItemId,
   procedureName,
   procedureCode,
   defaultFeeVND,
@@ -45,7 +45,7 @@ export function FeeScheduleEditor({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          procedureTypeId,
+          catalogItemId,
           feeVND: Number(feeVND),
           notes: notes || null,
         }),

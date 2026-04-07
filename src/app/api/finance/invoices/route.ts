@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
         },
       },
       include: {
-        procedureType: { select: { nameVi: true } },
+        catalogItem: { select: { nameVi: true } },
         treatment: {
           select: {
             patient: { select: { fullName: true } },
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
           lineItems: {
             create: completedSteps.map((step) => ({
               treatmentStepId: step.id,
-              description: `${step.procedureType.nameVi} - BN: ${step.treatment.patient.fullName}`,
+              description: `${step.catalogItem.nameVi} - BN: ${step.treatment.patient.fullName}`,
               quantity: step.quantity,
               unitPriceVND: step.unitFeeVND,
               totalVND: step.totalFeeVND,

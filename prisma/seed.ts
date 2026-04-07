@@ -246,11 +246,12 @@ async function main() {
   ];
 
   for (const proc of procedures) {
-    await prisma.procedureType.upsert({
+    await prisma.catalogItem.upsert({
       where: { code: proc.code },
       update: {
         nameVi: proc.nameVi,
         nameEn: proc.nameEn,
+        type: "SERVICE",
         category: proc.category,
         defaultFeeVND: proc.defaultFeeVND,
         discountRule: proc.discountRule === null ? Prisma.DbNull : proc.discountRule as Prisma.InputJsonValue,
@@ -260,6 +261,7 @@ async function main() {
         code: proc.code,
         nameVi: proc.nameVi,
         nameEn: proc.nameEn || null,
+        type: "SERVICE",
         category: proc.category,
         defaultFeeVND: proc.defaultFeeVND,
         discountRule: proc.discountRule === null ? Prisma.DbNull : proc.discountRule as Prisma.InputJsonValue,
@@ -268,7 +270,7 @@ async function main() {
     });
   }
 
-  console.log("Seed completed: admin user + 26 procedure types");
+  console.log("Seed completed: admin user + 26 catalog items (services)");
 }
 
 main()

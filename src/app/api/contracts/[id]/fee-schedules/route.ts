@@ -29,9 +29,9 @@ export async function GET(
     const feeSchedules = await prisma.feeSchedule.findMany({
       where: { contractId: id },
       include: {
-        procedureType: true,
+        catalogItem: true,
       },
-      orderBy: { procedureType: { code: "asc" } },
+      orderBy: { catalogItem: { code: "asc" } },
     });
 
     return NextResponse.json(feeSchedules);
@@ -57,9 +57,9 @@ export async function POST(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { procedureTypeId, feeVND, discountRule, notes } = body;
+    const { catalogItemId, feeVND, discountRule, notes } = body;
 
-    if (!procedureTypeId || feeVND === undefined) {
+    if (!catalogItemId || feeVND === undefined) {
       return NextResponse.json(
         { error: "Loai thu thuat va phi la bat buoc" },
         { status: 400 }
@@ -79,28 +79,28 @@ export async function POST(
     }
 
     // Verify procedure type exists
-    const procedureType = await prisma.procedureType.findUnique({
-      where: { id: procedureTypeId },
+    const catalogItem = await prisma.catalogItem.findUnique({
+      where: { id: catalogItemId },
     });
 
-    if (!procedureType) {
+    if (!catalogItem) {
       return NextResponse.json(
         { error: "Khong tim thay loai thu thuat" },
         { status: 404 }
       );
     }
 
-    // Upsert by contractId + procedureTypeId
+    // Upsert by contractId + catalogItemId
     const feeSchedule = await prisma.feeSchedule.upsert({
       where: {
-        contractId_procedureTypeId: {
+        contractId_catalogItemId: {
           contractId: id,
-          procedureTypeId,
+          catalogItemId,
         },
       },
       create: {
         contractId: id,
-        procedureTypeId,
+        catalogItemId,
         feeVND,
         discountRule: discountRule || null,
         notes: notes || null,
@@ -111,7 +111,7 @@ export async function POST(
         notes: notes || null,
       },
       include: {
-        procedureType: true,
+        catalogItem: true,
       },
     });
 

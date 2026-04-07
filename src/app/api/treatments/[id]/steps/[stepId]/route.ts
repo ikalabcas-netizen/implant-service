@@ -37,7 +37,7 @@ export async function PUT(
       where: { id: stepId },
       data,
       include: {
-        procedureType: {
+        catalogItem: {
           select: {
             id: true,
             code: true,

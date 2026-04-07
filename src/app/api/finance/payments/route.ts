@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         },
       },
       include: {
-        procedureType: { select: { nameVi: true } },
+        catalogItem: { select: { nameVi: true } },
         treatment: {
           select: {
             patient: { select: { fullName: true } },
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
                 treatmentStepId: step.id,
                 clinicName: clinic?.name || "—",
                 patientName: step.treatment.patient.fullName,
-                procedureName: step.procedureType.nameVi,
+                procedureName: step.catalogItem.nameVi,
                 performedDate: step.performedDate!,
                 amountVND: step.totalFeeVND,
               };

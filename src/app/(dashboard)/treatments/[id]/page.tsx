@@ -78,7 +78,7 @@ async function getTreatment(id: string) {
       },
       steps: {
         include: {
-          procedureType: {
+          catalogItem: {
             select: {
               id: true,
               code: true,
@@ -88,8 +88,8 @@ async function getTreatment(id: string) {
           },
           inventoryUsages: {
             include: {
-              inventoryItem: {
-                select: { name: true, brand: true, unit: true },
+              catalogItem: {
+                select: { nameVi: true, brand: true, unit: true },
               },
             },
           },
@@ -100,9 +100,9 @@ async function getTreatment(id: string) {
   });
 }
 
-async function getProcedureTypes() {
-  return prisma.procedureType.findMany({
-    where: { isActive: true },
+async function getCatalogItems() {
+  return prisma.catalogItem.findMany({
+    where: { isActive: true, type: "SERVICE" },
     select: { id: true, code: true, nameVi: true, category: true },
     orderBy: { code: "asc" },
   });
@@ -114,9 +114,9 @@ export default async function TreatmentDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [treatment, procedureTypes] = await Promise.all([
+  const [treatment, catalogItems] = await Promise.all([
     getTreatment(id),
-    getProcedureTypes(),
+    getCatalogItems(),
   ]);
 
   if (!treatment) {
@@ -305,7 +305,7 @@ export default async function TreatmentDetailPage({
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-semibold">
-                        {step.procedureType.nameVi}
+                        {step.catalogItem.nameVi}
                       </span>
                       <Badge
                         variant={
@@ -367,12 +367,12 @@ export default async function TreatmentDetailPage({
                               key={usage.id}
                               className="inline-flex items-center rounded bg-muted px-2 py-0.5 text-xs"
                             >
-                              {usage.inventoryItem.name}
-                              {usage.inventoryItem.brand &&
-                                ` (${usage.inventoryItem.brand})`}
+                              {usage.catalogItem.nameVi}
+                              {usage.catalogItem.brand &&
+                                ` (${usage.catalogItem.brand})`}
                               {" x"}
                               {Number(usage.quantityUsed)}{" "}
-                              {usage.inventoryItem.unit}
+                              {usage.catalogItem.unit}
                             </span>
                           ))}
                         </div>
@@ -406,7 +406,7 @@ export default async function TreatmentDetailPage({
         <CardContent>
           <AddStepForm
             treatmentId={treatment.id}
-            procedureTypes={procedureTypes}
+            catalogItems={catalogItems}
             currentStepCount={treatment.steps.length}
           />
         </CardContent>
@@ -435,7 +435,7 @@ export default async function TreatmentDetailPage({
               <TableBody>
                 {treatment.steps.map((step) => (
                   <TableRow key={step.id}>
-                    <TableCell>{step.procedureType.nameVi}</TableCell>
+                    <TableCell>{step.catalogItem.nameVi}</TableCell>
                     <TableCell className="text-center">
                       {step.quantity}
                     </TableCell>

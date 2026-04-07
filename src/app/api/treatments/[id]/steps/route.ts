@@ -12,7 +12,7 @@ export async function GET(
     const steps = await prisma.treatmentStep.findMany({
       where: { treatmentId: id },
       include: {
-        procedureType: {
+        catalogItem: {
           select: {
             id: true,
             code: true,
@@ -23,8 +23,8 @@ export async function GET(
         },
         inventoryUsages: {
           include: {
-            inventoryItem: {
-              select: { id: true, name: true, brand: true, unit: true },
+            catalogItem: {
+              select: { id: true, nameVi: true, brand: true, unit: true },
             },
           },
         },
@@ -51,7 +51,7 @@ export async function POST(
     const body = await request.json();
 
     const {
-      procedureTypeId,
+      catalogItemId,
       stepOrder,
       quantity = 1,
       sequenceIndex = 1,
@@ -60,7 +60,7 @@ export async function POST(
       toothNumbers,
     } = body;
 
-    if (!procedureTypeId || stepOrder === undefined) {
+    if (!catalogItemId || stepOrder === undefined) {
       return NextResponse.json(
         { error: "Loai thu thuat va thu tu buoc la bat buoc" },
         { status: 400 }
@@ -80,12 +80,12 @@ export async function POST(
       );
     }
 
-    // Look up the procedure type
-    const procedureType = await prisma.procedureType.findUnique({
-      where: { id: procedureTypeId },
+    // Look up the catalog item (must be a SERVICE)
+    const catalogItem = await prisma.catalogItem.findFirst({
+      where: { id: catalogItemId, type: "SERVICE" },
     });
 
-    if (!procedureType) {
+    if (!catalogItem) {
       return NextResponse.json(
         { error: "Khong tim thay loai thu thuat" },
         { status: 404 }
@@ -93,8 +93,8 @@ export async function POST(
     }
 
     // Try to find the doctor's fee schedule for this clinic
-    let baseFee = Number(procedureType.defaultFeeVND);
-    let discountRule = procedureType.discountRule;
+    let baseFee = Number(catalogItem.defaultFeeVND);
+    let discountRule = catalogItem.discountRule;
 
     const contract = await prisma.doctorClinicContract.findUnique({
       where: {
@@ -105,7 +105,7 @@ export async function POST(
       },
       include: {
         feeSchedules: {
-          where: { procedureTypeId },
+          where: { catalogItemId },
         },
       },
     });
@@ -129,7 +129,7 @@ export async function POST(
     const step = await prisma.treatmentStep.create({
       data: {
         treatmentId,
-        procedureTypeId,
+        catalogItemId,
         stepOrder,
         quantity,
         sequenceIndex,
@@ -140,7 +140,7 @@ export async function POST(
         totalFeeVND: totalFee,
       },
       include: {
-        procedureType: {
+        catalogItem: {
           select: {
             id: true,
             code: true,

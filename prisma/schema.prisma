@@ -99,7 +99,7 @@ model Clinic {
   phone              String?
   email              String?
   representativeName String?
-  representativeRole String? @default("Giam doc")
+  representativeRole String? @default("Giám đốc")
   taxId              String?
   isOutsideHCMC      Boolean @default(false)
   isActive           Boolean @default(true)
@@ -143,9 +143,15 @@ model DoctorClinicContract {
   @@unique([doctorId, clinicId])
 }
 
-// ============ PROCEDURE TYPES & FEE SCHEDULES ============
+// ============ CATALOG: PRODUCTS & SERVICES ============
 
-enum ProcedureCategory {
+enum CatalogItemType {
+  SERVICE
+  PRODUCT
+}
+
+enum CatalogCategory {
+  // Service categories
   IMPLANT_PLACEMENT
   EXTRACTION
   BONE_GRAFT
@@ -155,38 +161,59 @@ enum ProcedureCategory {
   FULL_ARCH
   COMPLEX_IMPLANT
   FOLLOW_UP
+  // Product categories
+  CONSUMABLE
+  REUSABLE
+  TOOL
+  EQUIPMENT
   OTHER
 }
 
-model ProcedureType {
-  id            String            @id @default(cuid())
-  code          String            @unique
+model CatalogItem {
+  id            String          @id @default(cuid())
+  type          CatalogItemType
+  code          String          @unique
   nameVi        String
   nameEn        String?
-  category      ProcedureCategory
+  category      CatalogCategory
   description   String?
-  defaultFeeVND Decimal           @db.Decimal(15, 0)
-  discountRule  Json?
-  isActive      Boolean           @default(true)
+  isActive      Boolean         @default(true)
 
-  feeSchedules   FeeSchedule[]
-  treatmentSteps TreatmentStep[]
+  // Pricing (both SERVICE + PRODUCT)
+  defaultFeeVND Decimal         @default(0) @db.Decimal(15, 0)
+  discountRule  Json?
+
+  // Inventory (PRODUCT only, null for SERVICE)
+  brand          String?
+  specifications Json?
+  lotNumber      String?
+  serialNumber   String?
+  expiryDate     DateTime?
+  unitCostVND    Decimal?        @db.Decimal(15, 0)
+  currentStock   Int?
+  minimumStock   Int?
+  unit           String?         @default("cái")
+
+  // Relations
+  feeSchedules    FeeSchedule[]
+  treatmentSteps  TreatmentStep[]
+  inventoryUsages StepInventoryUsage[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model FeeSchedule {
-  id              String               @id @default(cuid())
-  contractId      String
-  contract        DoctorClinicContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
-  procedureTypeId String
-  procedureType   ProcedureType        @relation(fields: [procedureTypeId], references: [id])
-  feeVND          Decimal              @db.Decimal(15, 0)
-  discountRule    Json?
-  notes           String?
+  id            String               @id @default(cuid())
+  contractId    String
+  contract      DoctorClinicContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  catalogItemId String
+  catalogItem   CatalogItem          @relation(fields: [catalogItemId], references: [id])
+  feeVND        Decimal              @db.Decimal(15, 0)
+  discountRule  Json?
+  notes         String?
 
-  @@unique([contractId, procedureTypeId])
+  @@unique([contractId, catalogItemId])
 }
 
 // ============ PATIENTS ============
@@ -232,21 +259,21 @@ enum TreatmentType {
 }
 
 model Treatment {
-  id           String          @id @default(cuid())
-  patientId    String
-  patient      Patient         @relation(fields: [patientId], references: [id])
-  doctorId     String
-  doctor       Doctor          @relation(fields: [doctorId], references: [id])
-  clinicId     String
-  type         TreatmentType
-  status       TreatmentStatus @default(PLANNING)
-  toothNumbers String?
-  implantCount Int             @default(0)
-  archType     String?
-  cbctImageUrl String?
-  xrayImageUrl String?
-  planNotes    String?
-  startDate    DateTime?
+  id             String          @id @default(cuid())
+  patientId      String
+  patient        Patient         @relation(fields: [patientId], references: [id])
+  doctorId       String
+  doctor         Doctor          @relation(fields: [doctorId], references: [id])
+  clinicId       String
+  type           TreatmentType
+  status         TreatmentStatus @default(PLANNING)
+  toothNumbers   String?
+  implantCount   Int             @default(0)
+  archType       String?
+  cbctImageUrl   String?
+  xrayImageUrl   String?
+  planNotes      String?
+  startDate      DateTime?
   completionDate DateTime?
 
   steps TreatmentStep[]
@@ -267,22 +294,22 @@ enum StepStatus {
 }
 
 model TreatmentStep {
-  id              String        @id @default(cuid())
-  treatmentId     String
-  treatment       Treatment     @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
-  procedureTypeId String
-  procedureType   ProcedureType @relation(fields: [procedureTypeId], references: [id])
-  stepOrder       Int
-  status          StepStatus    @default(PLANNED)
-  scheduledDate   DateTime?
-  performedDate   DateTime?
-  quantity        Int           @default(1)
-  sequenceIndex   Int           @default(1)
-  unitFeeVND      Decimal       @db.Decimal(15, 0)
-  totalFeeVND     Decimal       @db.Decimal(15, 0)
-  notes           String?
-  toothNumbers    String?
-  doctorSignedOff Boolean       @default(false)
+  id            String      @id @default(cuid())
+  treatmentId   String
+  treatment     Treatment   @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  catalogItemId String
+  catalogItem   CatalogItem @relation(fields: [catalogItemId], references: [id])
+  stepOrder     Int
+  status        StepStatus  @default(PLANNED)
+  scheduledDate DateTime?
+  performedDate DateTime?
+  quantity      Int         @default(1)
+  sequenceIndex Int         @default(1)
+  unitFeeVND    Decimal     @db.Decimal(15, 0)
+  totalFeeVND   Decimal     @db.Decimal(15, 0)
+  notes         String?
+  toothNumbers  String?
+  doctorSignedOff Boolean   @default(false)
 
   inventoryUsages StepInventoryUsage[]
 
@@ -290,46 +317,16 @@ model TreatmentStep {
   updatedAt DateTime @updatedAt
 }
 
-// ============ INVENTORY ============
-
-enum InventoryCategory {
-  CONSUMABLE
-  REUSABLE
-  TOOL
-  EQUIPMENT
-}
-
-model InventoryItem {
-  id             String            @id @default(cuid())
-  name           String
-  brand          String?
-  category       InventoryCategory
-  specifications Json?
-  lotNumber      String?
-  serialNumber   String?
-  expiryDate     DateTime?
-  unitCostVND    Decimal           @default(0) @db.Decimal(15, 0)
-  currentStock   Int               @default(0)
-  minimumStock   Int               @default(0)
-  unit           String            @default("cai")
-  isActive       Boolean           @default(true)
-
-  usages StepInventoryUsage[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model StepInventoryUsage {
-  id              String        @id @default(cuid())
+  id            String        @id @default(cuid())
   treatmentStepId String
-  treatmentStep   TreatmentStep @relation(fields: [treatmentStepId], references: [id], onDelete: Cascade)
-  inventoryItemId String
-  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
-  quantityUsed    Decimal       @db.Decimal(10, 2)
-  costVND         Decimal       @db.Decimal(15, 0)
-  notes           String?
-  createdAt       DateTime      @default(now())
+  treatmentStep TreatmentStep @relation(fields: [treatmentStepId], references: [id], onDelete: Cascade)
+  catalogItemId String
+  catalogItem   CatalogItem   @relation(fields: [catalogItemId], references: [id])
+  quantityUsed  Decimal       @db.Decimal(10, 2)
+  costVND       Decimal       @db.Decimal(15, 0)
+  notes         String?
+  createdAt     DateTime      @default(now())
 }
 
 // ============ FINANCIAL ============

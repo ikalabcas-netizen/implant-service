@@ -19,7 +19,7 @@ import {
   Building2,
   Users,
   Stethoscope,
-  Package,
+  ShoppingBag,
   Receipt,
   FileText,
   Settings,
@@ -53,7 +53,7 @@ const menuItems: MenuGroup[] = [
       { title: "Phòng khám", href: "/clinics", icon: Building2, roles: ["SUPER_ADMIN", "ADMIN"] },
       { title: "Bệnh nhân", href: "/patients", icon: Users, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
       { title: "Ca điều trị", href: "/treatments", icon: Stethoscope, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
-      { title: "Tồn kho", href: "/inventory", icon: Package, roles: ["SUPER_ADMIN", "ADMIN", "WAREHOUSE_STAFF"] },
+      { title: "Sản phẩm & Dịch vụ", href: "/catalog", icon: ShoppingBag, roles: ["SUPER_ADMIN", "ADMIN", "WAREHOUSE_STAFF", "DOCTOR"] },
     ],
   },
   {

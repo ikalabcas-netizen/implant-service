@@ -31,7 +31,7 @@ export async function GET(
         },
         steps: {
           include: {
-            procedureType: {
+            catalogItem: {
               select: {
                 id: true,
                 code: true,
@@ -42,8 +42,8 @@ export async function GET(
             },
             inventoryUsages: {
               include: {
-                inventoryItem: {
-                  select: { id: true, name: true, brand: true, unit: true },
+                catalogItem: {
+                  select: { id: true, nameVi: true, brand: true, unit: true },
                 },
               },
             },

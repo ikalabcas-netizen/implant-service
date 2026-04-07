@@ -14,8 +14,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, FileText, DollarSign } from "lucide-react";
 import { formatVND } from "@/lib/fee-calculator";
-import { PROCEDURE_CATEGORY_LABELS } from "@/lib/constants";
-import type { ContractStatus, ProcedureCategory } from "@prisma/client";
+import { CATALOG_CATEGORY_LABELS } from "@/lib/constants";
+import type { ContractStatus, CatalogCategory } from "@prisma/client";
 import { FeeScheduleEditor } from "./fee-schedule-editor";
 
 const CONTRACT_STATUS_LABELS: Record<ContractStatus, string> = {
@@ -54,8 +54,8 @@ export default async function ContractDetailPage({
       },
       clinic: true,
       feeSchedules: {
-        include: { procedureType: true },
-        orderBy: { procedureType: { code: "asc" } },
+        include: { catalogItem: true },
+        orderBy: { catalogItem: { code: "asc" } },
       },
     },
   });
@@ -65,7 +65,7 @@ export default async function ContractDetailPage({
   }
 
   // Fetch all active procedure types for the fee schedule table
-  const procedureTypes = await prisma.procedureType.findMany({
+  const catalogItems = await prisma.catalogItem.findMany({
     where: { isActive: true },
     orderBy: { code: "asc" },
   });
@@ -73,19 +73,19 @@ export default async function ContractDetailPage({
   // Build a map of existing fee overrides
   const feeOverrides = new Map(
     contract.feeSchedules.map((fs) => [
-      fs.procedureTypeId,
+      fs.catalogItemId,
       { feeVND: fs.feeVND, notes: fs.notes, id: fs.id },
     ])
   );
 
   // Build procedure rows for display
-  const procedureRows = procedureTypes.map((pt) => {
+  const procedureRows = catalogItems.map((pt) => {
     const override = feeOverrides.get(pt.id);
     return {
-      procedureTypeId: pt.id,
+      catalogItemId: pt.id,
       code: pt.code,
       nameVi: pt.nameVi,
-      category: pt.category as ProcedureCategory,
+      category: pt.category as CatalogCategory,
       defaultFeeVND: Number(pt.defaultFeeVND),
       overrideFeeVND: override ? Number(override.feeVND) : null,
       notes: override?.notes || null,
@@ -202,7 +202,7 @@ export default async function ContractDetailPage({
               <TableBody>
                 {procedureRows.map((row) => (
                   <TableRow
-                    key={row.procedureTypeId}
+                    key={row.catalogItemId}
                     className={row.hasOverride ? "bg-muted/30" : ""}
                   >
                     <TableCell className="font-mono text-sm">
@@ -210,7 +210,7 @@ export default async function ContractDetailPage({
                     </TableCell>
                     <TableCell>{row.nameVi}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {PROCEDURE_CATEGORY_LABELS[row.category] || row.category}
+                      {CATALOG_CATEGORY_LABELS[row.category] || row.category}
                     </TableCell>
                     <TableCell className="text-right">
                       {formatVND(row.defaultFeeVND)}
@@ -230,7 +230,7 @@ export default async function ContractDetailPage({
                     <TableCell className="text-center">
                       <FeeScheduleEditor
                         contractId={contract.id}
-                        procedureTypeId={row.procedureTypeId}
+                        catalogItemId={row.catalogItemId}
                         procedureName={row.nameVi}
                         procedureCode={row.code}
                         defaultFeeVND={row.defaultFeeVND}

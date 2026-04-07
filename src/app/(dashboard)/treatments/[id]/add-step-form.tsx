@@ -13,10 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PROCEDURE_CATEGORY_LABELS } from "@/lib/constants";
+import { CATALOG_CATEGORY_LABELS } from "@/lib/constants";
 import { Plus, X } from "lucide-react";
 
-interface ProcedureType {
+interface CatalogItem {
   id: string;
   code: string;
   nameVi: string;
@@ -25,13 +25,13 @@ interface ProcedureType {
 
 interface AddStepFormProps {
   treatmentId: string;
-  procedureTypes: ProcedureType[];
+  catalogItems: CatalogItem[];
   currentStepCount: number;
 }
 
 export function AddStepForm({
   treatmentId,
-  procedureTypes,
+  catalogItems,
   currentStepCount,
 }: AddStepFormProps) {
   const router = useRouter();
@@ -39,14 +39,14 @@ export function AddStepForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [procedureTypeId, setProcedureTypeId] = useState("");
+  const [catalogItemId, setCatalogItemId] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [scheduledDate, setScheduledDate] = useState("");
   const [notes, setNotes] = useState("");
   const [toothNumbers, setToothNumbers] = useState("");
 
   function resetForm() {
-    setProcedureTypeId("");
+    setCatalogItemId("");
     setQuantity("1");
     setScheduledDate("");
     setNotes("");
@@ -58,7 +58,7 @@ export function AddStepForm({
     e.preventDefault();
     setError("");
 
-    if (!procedureTypeId) {
+    if (!catalogItemId) {
       setError("Vui lòng chọn loại thủ thuật");
       return;
     }
@@ -69,7 +69,7 @@ export function AddStepForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          procedureTypeId,
+          catalogItemId,
           stepOrder: currentStepCount + 1,
           quantity: parseInt(quantity) || 1,
           sequenceIndex: 1,
@@ -97,7 +97,7 @@ export function AddStepForm({
   }
 
   // Group procedure types by category
-  const grouped = procedureTypes.reduce<Record<string, ProcedureType[]>>(
+  const grouped = catalogItems.reduce<Record<string, CatalogItem[]>>(
     (acc, pt) => {
       const cat = pt.category;
       if (!acc[cat]) acc[cat] = [];
@@ -127,8 +127,8 @@ export function AddStepForm({
       <div className="space-y-2">
         <Label>Loại thủ thuật *</Label>
         <Select
-          value={procedureTypeId}
-          onValueChange={(v) => setProcedureTypeId(v ?? "")}
+          value={catalogItemId}
+          onValueChange={(v) => setCatalogItemId(v ?? "")}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Chọn thủ thuật" />
@@ -137,7 +137,7 @@ export function AddStepForm({
             {Object.entries(grouped).map(([category, types]) => (
               <div key={category}>
                 <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                  {PROCEDURE_CATEGORY_LABELS[category] || category}
+                  {CATALOG_CATEGORY_LABELS[category] || category}
                 </div>
                 {types.map((pt) => (
                   <SelectItem key={pt.id} value={pt.id}>

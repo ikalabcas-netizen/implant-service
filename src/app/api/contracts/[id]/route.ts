@@ -33,9 +33,9 @@ export async function GET(
         clinic: true,
         feeSchedules: {
           include: {
-            procedureType: true,
+            catalogItem: true,
           },
-          orderBy: { procedureType: { code: "asc" } },
+          orderBy: { catalogItem: { code: "asc" } },
         },
       },
     });

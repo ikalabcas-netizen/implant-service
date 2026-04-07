@@ -49,14 +49,12 @@ export const STEP_STATUS_LABELS: Record<string, string> = {
   COMPLICATION: "Biến chứng",
 };
 
-export const INVENTORY_CATEGORY_LABELS: Record<string, string> = {
-  CONSUMABLE: "Vật tư tiêu hao",
-  REUSABLE: "Vật tư tái sử dụng",
-  TOOL: "Dụng cụ",
-  EQUIPMENT: "Thiết bị",
+export const CATALOG_TYPE_LABELS: Record<string, string> = {
+  SERVICE: "Dịch vụ",
+  PRODUCT: "Sản phẩm",
 };
 
-export const PROCEDURE_CATEGORY_LABELS: Record<string, string> = {
+export const CATALOG_CATEGORY_LABELS: Record<string, string> = {
   IMPLANT_PLACEMENT: "Cắm implant",
   EXTRACTION: "Nhổ răng",
   BONE_GRAFT: "Ghép xương",
@@ -66,5 +64,9 @@ export const PROCEDURE_CATEGORY_LABELS: Record<string, string> = {
   FULL_ARCH: "Toàn hàm",
   COMPLEX_IMPLANT: "Implant phức tạp",
   FOLLOW_UP: "Tái khám",
+  CONSUMABLE: "Vật tư tiêu hao",
+  REUSABLE: "Vật tư tái sử dụng",
+  TOOL: "Dụng cụ",
+  EQUIPMENT: "Thiết bị",
   OTHER: "Khác",
 };
