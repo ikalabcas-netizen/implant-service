@@ -138,7 +138,7 @@ export default async function TreatmentDetailPage({
       <div>
         <Button variant="ghost" size="sm" render={<Link href="/treatments" />}>
           <ArrowLeft data-icon="inline-start" />
-          Quay lai danh sach
+          Quay lại danh sách
         </Button>
       </div>
 
@@ -147,7 +147,7 @@ export default async function TreatmentDetailPage({
         <div className="space-y-1">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold">
-              Ca dieu tri: {treatment.patient.fullName}
+              Ca điều trị: {treatment.patient.fullName}
             </h1>
             <Badge
               variant={STATUS_VARIANT[treatment.status] || "outline"}
@@ -164,7 +164,7 @@ export default async function TreatmentDetailPage({
         </div>
         <div className="text-right text-sm text-muted-foreground">
           <p>
-            Tien do: {completedSteps}/{totalSteps} buoc
+            Tiến độ: {completedSteps}/{totalSteps} bước
           </p>
           {totalSteps > 0 && (
             <div className="mt-1 h-2 w-40 overflow-hidden rounded-full bg-muted">
@@ -190,7 +190,7 @@ export default async function TreatmentDetailPage({
             <User className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Benh nhan
+                Bệnh nhân
               </p>
               <p className="font-semibold">{treatment.patient.fullName}</p>
               {treatment.patient.phone && (
@@ -207,7 +207,7 @@ export default async function TreatmentDetailPage({
             <Stethoscope className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Bac si
+                Bác sĩ
               </p>
               <p className="font-semibold">{treatment.doctor.fullName}</p>
               {treatment.doctor.specialization && (
@@ -224,7 +224,7 @@ export default async function TreatmentDetailPage({
             <MapPin className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Phong kham
+                Phòng khám
               </p>
               <p className="font-semibold">
                 {treatment.patient.clinic.name}
@@ -254,7 +254,7 @@ export default async function TreatmentDetailPage({
       {treatment.planNotes && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Ghi chu ke hoach</CardTitle>
+            <CardTitle className="text-base">Ghi chú kế hoạch</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="whitespace-pre-wrap text-sm">{treatment.planNotes}</p>
@@ -265,12 +265,12 @@ export default async function TreatmentDetailPage({
       {/* Treatment steps pipeline */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Cac buoc dieu tri</CardTitle>
+          <CardTitle>Các bước điều trị</CardTitle>
         </CardHeader>
         <CardContent>
           {treatment.steps.length === 0 ? (
             <p className="text-center text-muted-foreground py-6">
-              Chua co buoc dieu tri nao. Them buoc moi ben duoi.
+              Chưa có bước điều trị nào. Thêm bước mới bên dưới.
             </p>
           ) : (
             <div className="space-y-3">
@@ -317,7 +317,7 @@ export default async function TreatmentDetailPage({
                       {step.doctorSignedOff && (
                         <Badge variant="default">
                           <CheckCircle2 className="h-3 w-3" />
-                          BS da ky
+                          BS đã ký
                         </Badge>
                       )}
                     </div>
@@ -326,7 +326,7 @@ export default async function TreatmentDetailPage({
                       {step.scheduledDate && (
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          Dat lich:{" "}
+                          Đặt lịch:{" "}
                           {new Date(step.scheduledDate).toLocaleDateString(
                             "vi-VN"
                           )}
@@ -335,14 +335,14 @@ export default async function TreatmentDetailPage({
                       {step.performedDate && (
                         <span className="flex items-center gap-1">
                           <CheckCircle2 className="h-3 w-3" />
-                          Thuc hien:{" "}
+                          Thực hiện:{" "}
                           {new Date(step.performedDate).toLocaleDateString(
                             "vi-VN"
                           )}
                         </span>
                       )}
                       {step.toothNumbers && (
-                        <span>Rang: {step.toothNumbers}</span>
+                        <span>Răng: {step.toothNumbers}</span>
                       )}
                       {step.quantity > 1 && (
                         <span>SL: {step.quantity}</span>
@@ -359,7 +359,7 @@ export default async function TreatmentDetailPage({
                     {step.inventoryUsages.length > 0 && (
                       <div className="mt-2">
                         <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Vat tu su dung:
+                          Vật tư sử dụng:
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {step.inventoryUsages.map((usage) => (
@@ -401,7 +401,7 @@ export default async function TreatmentDetailPage({
       {/* Add step section */}
       <Card>
         <CardHeader>
-          <CardTitle>Them buoc dieu tri</CardTitle>
+          <CardTitle>Thêm bước điều trị</CardTitle>
         </CardHeader>
         <CardContent>
           <AddStepForm
@@ -415,18 +415,18 @@ export default async function TreatmentDetailPage({
       {/* Treatment summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Tong hop chi phi</CardTitle>
+          <CardTitle>Tổng hợp chi phí</CardTitle>
         </CardHeader>
         <CardContent>
           {treatment.steps.length === 0 ? (
             <p className="text-muted-foreground text-sm">
-              Chua co buoc dieu tri nao de tinh phi.
+              Chưa có bước điều trị nào để tính phí.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Thu thuat</TableHead>
+                  <TableHead>Thủ thuật</TableHead>
                   <TableHead className="text-center">SL</TableHead>
                   <TableHead className="text-right">Don gia</TableHead>
                   <TableHead className="text-right">Thanh tien</TableHead>
@@ -452,7 +452,7 @@ export default async function TreatmentDetailPage({
                     colSpan={3}
                     className="text-right font-bold"
                   >
-                    Tong cong
+                    Tổng cộng
                   </TableCell>
                   <TableCell className="text-right font-bold text-lg">
                     {formatVND(totalFees)}

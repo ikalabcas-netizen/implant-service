@@ -78,11 +78,11 @@ export default async function ContractsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Bac si</TableHead>
-                  <TableHead>Phong kham</TableHead>
+                  <TableHead>Bác sĩ</TableHead>
+                  <TableHead>Phòng khám</TableHead>
                   <TableHead>Số hợp đồng</TableHead>
-                  <TableHead>Ngay bat dau</TableHead>
-                  <TableHead>Trang thai</TableHead>
+                  <TableHead>Ngày bắt đầu</TableHead>
+                  <TableHead>Trạng thái</TableHead>
                   <TableHead className="text-center">Bảng phí</TableHead>
                 </TableRow>
               </TableHeader>

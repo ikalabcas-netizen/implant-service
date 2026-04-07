@@ -34,9 +34,9 @@ import {
 import { ArrowLeft, Plus } from "lucide-react";
 
 const PAYMENT_STATUS_LABELS: Record<string, string> = {
-  PENDING: "Cho duyet",
-  APPROVED: "Da duyet",
-  PAID: "Da chi",
+  PENDING: "Chờ duyệt",
+  APPROVED: "Đã duyệt",
+  PAID: "Đã chi",
 };
 
 const PAYMENT_STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -91,7 +91,7 @@ export default function PaymentsPage() {
 
   async function handleGenerate() {
     if (!selectedDoctor) {
-      setError("Vui long chon bac si");
+      setError("Vui lòng chọn bác sĩ");
       return;
     }
     setGenerating(true);
@@ -110,7 +110,7 @@ export default function PaymentsPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Khong the tao phieu chi");
+        setError(data.error || "Không thể tạo phiếu chi");
         setGenerating(false);
         return;
       }
@@ -119,7 +119,7 @@ export default function PaymentsPage() {
       setDialogOpen(false);
       router.push(`/finance/payments/${voucher.id}`);
     } catch {
-      setError("Loi ket noi");
+      setError("Lỗi kết nối");
       setGenerating(false);
     }
   }
@@ -129,36 +129,36 @@ export default function PaymentsPage() {
       <div>
         <Button variant="ghost" size="sm" render={<Link href="/finance" />}>
           <ArrowLeft data-icon="inline-start" />
-          Quay lai tai chinh
+          Quay lại tài chính
         </Button>
       </div>
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Phieu chi bac si</h1>
+          <h1 className="text-2xl font-bold">Phiếu chi bác sĩ</h1>
           <p className="text-muted-foreground">
-            Quan ly chi tra hang thang cho bac si
+            Quản lý chi trả hàng tháng cho bác sĩ
           </p>
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger render={<Button />}>
             <Plus data-icon="inline-start" />
-            Tao phieu chi
+            Tạo phiếu chi
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Tao phieu chi moi</DialogTitle>
+              <DialogTitle>Tạo phiếu chi mới</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label>Bac si</Label>
+                <Label>Bác sĩ</Label>
                 <Select
                   value={selectedDoctor}
                   onValueChange={(val: string | null) => setSelectedDoctor(val || "")}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Chon bac si" />
+                    <SelectValue placeholder="Chọn bác sĩ" />
                   </SelectTrigger>
                   <SelectContent>
                     {doctors.map((d) => (
@@ -172,7 +172,7 @@ export default function PaymentsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Thang</Label>
+                  <Label>Tháng</Label>
                   <Select
                     value={periodMonth}
                     onValueChange={(val: string | null) => setPeriodMonth(val || periodMonth)}
@@ -183,14 +183,14 @@ export default function PaymentsPage() {
                     <SelectContent>
                       {Array.from({ length: 12 }, (_, i) => (
                         <SelectItem key={i + 1} value={String(i + 1)}>
-                          Thang {i + 1}
+                          Tháng {i + 1}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Nam</Label>
+                  <Label>Năm</Label>
                   <Input
                     type="number"
                     value={periodYear}
@@ -208,7 +208,7 @@ export default function PaymentsPage() {
                 onClick={handleGenerate}
                 disabled={generating}
               >
-                {generating ? "Dang tao..." : "Tao phieu chi"}
+                {generating ? "Đang tạo..." : "Tạo phiếu chi"}
               </Button>
             </div>
           </DialogContent>
@@ -217,27 +217,27 @@ export default function PaymentsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Danh sach phieu chi</CardTitle>
+          <CardTitle>Danh sách phiếu chi</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="text-center text-muted-foreground py-8">Dang tai...</p>
+            <p className="text-center text-muted-foreground py-8">Đang tải...</p>
           ) : vouchers.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co phieu chi nao.
+              Chưa có phiếu chi nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ma phieu</TableHead>
-                  <TableHead>Bac si</TableHead>
-                  <TableHead>Ky</TableHead>
-                  <TableHead className="text-right">Tong</TableHead>
-                  <TableHead className="text-right">Thue TNCN</TableHead>
-                  <TableHead className="text-right">Cong tac</TableHead>
-                  <TableHead className="text-right">Thuc nhan</TableHead>
-                  <TableHead>Trang thai</TableHead>
+                  <TableHead>Mã phiếu</TableHead>
+                  <TableHead>Bác sĩ</TableHead>
+                  <TableHead>Kỳ</TableHead>
+                  <TableHead className="text-right">Tổng</TableHead>
+                  <TableHead className="text-right">Thuế TNCN</TableHead>
+                  <TableHead className="text-right">Công tác</TableHead>
+                  <TableHead className="text-right">Thực nhận</TableHead>
+                  <TableHead>Trạng thái</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

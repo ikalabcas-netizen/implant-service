@@ -56,7 +56,7 @@ export default function EditInventoryItemPage() {
     async function fetchItem() {
       try {
         const res = await fetch(`/api/inventory/${params.id}`);
-        if (!res.ok) throw new Error("Khong the tai thong tin vat tu");
+        if (!res.ok) throw new Error("Không thể tải thông tin vật tư");
         const data: InventoryItem = await res.json();
 
         setName(data.name);
@@ -81,7 +81,7 @@ export default function EditInventoryItemPage() {
         setIsActive(data.isActive);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Loi tai thong tin vat tu"
+          err instanceof Error ? err.message : "Lỗi tải thông tin vật tư"
         );
       } finally {
         setFetching(false);
@@ -95,7 +95,7 @@ export default function EditInventoryItemPage() {
     setError("");
 
     if (!name.trim() || !category) {
-      setError("Ten va danh muc la bat buoc");
+      setError("Tên và danh mục là bắt buộc");
       return;
     }
 
@@ -122,13 +122,13 @@ export default function EditInventoryItemPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Loi khi cap nhat vat tu");
+        throw new Error(data.error || "Lỗi khi cập nhật vật tư");
       }
 
       router.push(`/inventory/${params.id}`);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Loi khi cap nhat vat tu"
+        err instanceof Error ? err.message : "Lỗi khi cập nhật vật tư"
       );
     } finally {
       setLoading(false);
@@ -138,8 +138,8 @@ export default function EditInventoryItemPage() {
   if (fetching) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Chinh sua vat tu</h1>
-        <p className="text-muted-foreground">Dang tai du lieu...</p>
+        <h1 className="text-2xl font-bold">Chỉnh sửa vật tư</h1>
+        <p className="text-muted-foreground">Đang tải dữ liệu...</p>
       </div>
     );
   }
@@ -147,15 +147,15 @@ export default function EditInventoryItemPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Chinh sua vat tu</h1>
+        <h1 className="text-2xl font-bold">Chỉnh sửa vật tư</h1>
         <p className="text-muted-foreground">
-          Cap nhat thong tin vat tu trong kho
+          Cập nhật thông tin vật tư trong kho
         </p>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Thong tin vat tu</CardTitle>
+          <CardTitle>Thông tin vật tư</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -166,19 +166,19 @@ export default function EditInventoryItemPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="name">Ten vat tu *</Label>
+              <Label htmlFor="name">Tên vật tư *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Nhap ten vat tu"
+                placeholder="Nhập tên vật tư"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="brand">Thuong hieu</Label>
+                <Label htmlFor="brand">Thương hiệu</Label>
                 <Input
                   id="brand"
                   value={brand}
@@ -188,13 +188,13 @@ export default function EditInventoryItemPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Danh muc *</Label>
+                <Label>Danh mục *</Label>
                 <Select
                   value={category}
                   onValueChange={(v) => setCategory(v ?? "")}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Chon danh muc" />
+                    <SelectValue placeholder="Chọn danh mục" />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(INVENTORY_CATEGORY_LABELS).map(
@@ -210,19 +210,19 @@ export default function EditInventoryItemPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="specifications">Thong so ky thuat</Label>
+              <Label htmlFor="specifications">Thông số kỹ thuật</Label>
               <Textarea
                 id="specifications"
                 value={specifications}
                 onChange={(e) => setSpecifications(e.target.value)}
-                placeholder="Kich thuoc, chat lieu, thong so..."
+                placeholder="Kích thước, chất liệu, thông số..."
                 rows={3}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="lotNumber">So lo</Label>
+                <Label htmlFor="lotNumber">Số lô</Label>
                 <Input
                   id="lotNumber"
                   value={lotNumber}
@@ -232,7 +232,7 @@ export default function EditInventoryItemPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="serialNumber">So seri</Label>
+                <Label htmlFor="serialNumber">Số seri</Label>
                 <Input
                   id="serialNumber"
                   value={serialNumber}
@@ -244,7 +244,7 @@ export default function EditInventoryItemPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="expiryDate">Han su dung</Label>
+                <Label htmlFor="expiryDate">Hạn sử dụng</Label>
                 <Input
                   id="expiryDate"
                   type="date"
@@ -254,7 +254,7 @@ export default function EditInventoryItemPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="unitCostVND">Don gia (VND)</Label>
+                <Label htmlFor="unitCostVND">Đơn giá (VND)</Label>
                 <Input
                   id="unitCostVND"
                   type="number"
@@ -268,7 +268,7 @@ export default function EditInventoryItemPage() {
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="currentStock">Ton kho hien tai</Label>
+                <Label htmlFor="currentStock">Tồn kho hiện tại</Label>
                 <Input
                   id="currentStock"
                   type="number"
@@ -280,7 +280,7 @@ export default function EditInventoryItemPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="minimumStock">Ton kho toi thieu</Label>
+                <Label htmlFor="minimumStock">Tồn kho tối thiểu</Label>
                 <Input
                   id="minimumStock"
                   type="number"
@@ -292,7 +292,7 @@ export default function EditInventoryItemPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="unit">Don vi</Label>
+                <Label htmlFor="unit">Đơn vị</Label>
                 <Input
                   id="unit"
                   value={unit}
@@ -310,19 +310,19 @@ export default function EditInventoryItemPage() {
                 onChange={(e) => setIsActive(e.target.checked)}
                 className="h-4 w-4"
               />
-              <Label htmlFor="isActive">Dang hoat dong</Label>
+              <Label htmlFor="isActive">Đang hoạt động</Label>
             </div>
 
             <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={loading}>
-                {loading ? "Dang luu..." : "Cap nhat"}
+                {loading ? "Đang lưu..." : "Cập nhật"}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => router.push(`/inventory/${params.id}`)}
               >
-                Huy
+                Hủy
               </Button>
             </div>
           </form>

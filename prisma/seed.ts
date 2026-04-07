@@ -10,7 +10,7 @@ async function main() {
   const procedures = [
     {
       code: "IMPLANT_SINGLE",
-      nameVi: "Cam ghep implant",
+      nameVi: "Cấy ghép implant",
       nameEn: "Implant Placement",
       category: "IMPLANT_PLACEMENT" as const,
       defaultFeeVND: 3500000,
@@ -18,7 +18,7 @@ async function main() {
     },
     {
       code: "HEALING_ABUTMENT",
-      nameVi: "Dat Healing abutment",
+      nameVi: "Đặt Healing abutment",
       nameEn: "Healing Abutment",
       category: "HEALING" as const,
       defaultFeeVND: 300000,
@@ -26,7 +26,7 @@ async function main() {
     },
     {
       code: "ABUTMENT_IMPRESSION",
-      nameVi: "Dat Abutment, lay dau",
+      nameVi: "Đặt Abutment, lấy dấu",
       nameEn: "Abutment & Impression",
       category: "PROSTHETIC" as const,
       defaultFeeVND: 300000,
@@ -34,7 +34,7 @@ async function main() {
     },
     {
       code: "IMPRESSION",
-      nameVi: "Lay dau",
+      nameVi: "Lấy dấu",
       nameEn: "Impression",
       category: "PROSTHETIC" as const,
       defaultFeeVND: 200000,
@@ -42,16 +42,16 @@ async function main() {
     },
     {
       code: "PROSTHETIC_IMPLANT",
-      nameVi: "Gan phuc hinh implant don",
+      nameVi: "Gắn phục hình implant đơn",
       nameEn: "Implant Prosthetic Delivery",
       category: "PROSTHETIC" as const,
       defaultFeeVND: 700000,
-      description: "Lay dau + phuc hinh. Chi phuc hinh: 400.000d/rang",
+      description: "Lấy dấu + phục hình. Chỉ phục hình: 400.000d/răng",
       discountRule: null,
     },
     {
       code: "PROSTHETIC_ONLY",
-      nameVi: "Phuc hinh (khong lay dau)",
+      nameVi: "Phục hình (không lấy dấu)",
       nameEn: "Prosthetic Only",
       category: "PROSTHETIC" as const,
       defaultFeeVND: 400000,
@@ -59,7 +59,7 @@ async function main() {
     },
     {
       code: "EXTRACTION_ATRAUMATIC",
-      nameVi: "Nho rang khong sang chan",
+      nameVi: "Nhổ răng không sang chấn",
       nameEn: "Atraumatic Extraction",
       category: "EXTRACTION" as const,
       defaultFeeVND: 1000000,
@@ -67,7 +67,7 @@ async function main() {
     },
     {
       code: "IMMEDIATE_TEMP",
-      nameVi: "Rang tam tuc thi tren implant",
+      nameVi: "Răng tạm tức thì trên implant",
       nameEn: "Immediate Temporary on Implant",
       category: "PROSTHETIC" as const,
       defaultFeeVND: 1000000,
@@ -75,16 +75,16 @@ async function main() {
     },
     {
       code: "CUSTOM_HEALING",
-      nameVi: "Healing ca nhan (tuc thi)",
+      nameVi: "Healing cá nhân (tức thì)",
       nameEn: "Custom Healing Abutment",
       category: "HEALING" as const,
       defaultFeeVND: 700000,
-      description: "Nho rang cam tuc thi co/khong ghep xuong de che kin o nho",
+      description: "Nhổ răng cấy tức thì có/không ghép xương để che kín ổ nhổ",
       discountRule: null,
     },
     {
       code: "WISDOM_MEDIUM",
-      nameVi: "Nho rang khon lech, ngam trung binh",
+      nameVi: "Nhổ răng khôn lệch, ngầm trung bình",
       nameEn: "Wisdom Tooth Extraction (Medium)",
       category: "EXTRACTION" as const,
       defaultFeeVND: 1500000,
@@ -92,7 +92,7 @@ async function main() {
     },
     {
       code: "WISDOM_DIFFICULT",
-      nameVi: "Nho rang khon ngam/lech kho",
+      nameVi: "Nhổ răng khôn ngầm/lệch khó",
       nameEn: "Wisdom Tooth Extraction (Difficult)",
       category: "EXTRACTION" as const,
       defaultFeeVND: 2000000,
@@ -101,7 +101,7 @@ async function main() {
     },
     {
       code: "BONE_GRAFT",
-      nameVi: "Ghep xuong",
+      nameVi: "Ghép xương",
       nameEn: "Bone Graft",
       category: "BONE_GRAFT" as const,
       defaultFeeVND: 2000000,
@@ -117,7 +117,7 @@ async function main() {
     },
     {
       code: "EXTRACTION_BONE_GRAFT",
-      nameVi: "Nho rang + ghep xuong",
+      nameVi: "Nhổ răng + ghép xương",
       nameEn: "Extraction + Bone Graft",
       category: "EXTRACTION" as const,
       defaultFeeVND: 2000000,
@@ -125,7 +125,7 @@ async function main() {
     },
     {
       code: "SINUS_CLOSED_NO_GRAFT",
-      nameVi: "Nang xoang kin khong ghep xuong",
+      nameVi: "Nâng xoang kín không ghép xương",
       nameEn: "Closed Sinus Lift (no graft)",
       category: "SINUS_LIFT" as const,
       defaultFeeVND: 1000000,
@@ -133,7 +133,7 @@ async function main() {
     },
     {
       code: "SINUS_CLOSED_GRAFT",
-      nameVi: "Nang xoang kin + ghep xuong",
+      nameVi: "Nâng xoang kín + ghép xương",
       nameEn: "Closed Sinus Lift + Bone Graft",
       category: "SINUS_LIFT" as const,
       defaultFeeVND: 4000000,
@@ -147,7 +147,7 @@ async function main() {
     },
     {
       code: "SINUS_OPEN_GRAFT",
-      nameVi: "Nang xoang ho + ghep xuong",
+      nameVi: "Nâng xoang hở + ghép xương",
       nameEn: "Open Sinus Lift + Bone Graft",
       category: "SINUS_LIFT" as const,
       defaultFeeVND: 5000000,
@@ -161,7 +161,7 @@ async function main() {
     },
     {
       code: "ALL_ON_4",
-      nameVi: "All-on-4 (phau thuat + phuc hinh tam)",
+      nameVi: "All-on-4 (phẫu thuật + phục hình tạm)",
       nameEn: "All-on-4 Surgery + Temp Prosthetic",
       category: "FULL_ARCH" as const,
       defaultFeeVND: 24000000,
@@ -170,7 +170,7 @@ async function main() {
     },
     {
       code: "ALL_ON_5_6",
-      nameVi: "All-on-5/6 (phau thuat + phuc hinh tam)",
+      nameVi: "All-on-5/6 (phẫu thuật + phục hình tạm)",
       nameEn: "All-on-5/6 Surgery + Temp Prosthetic",
       category: "FULL_ARCH" as const,
       defaultFeeVND: 30000000,
@@ -179,7 +179,7 @@ async function main() {
     },
     {
       code: "ALL_ON_4_PROSTHETIC",
-      nameVi: "Phuc hinh chinh thuc All-on-4",
+      nameVi: "Phục hình chính thức All-on-4",
       nameEn: "All-on-4 Final Prosthetic",
       category: "FULL_ARCH" as const,
       defaultFeeVND: 6000000,
@@ -188,7 +188,7 @@ async function main() {
     },
     {
       code: "ALL_ON_5_6_PROSTHETIC",
-      nameVi: "Phuc hinh chinh thuc All-on-5/6",
+      nameVi: "Phục hình chính thức All-on-5/6",
       nameEn: "All-on-5/6 Final Prosthetic",
       category: "FULL_ARCH" as const,
       defaultFeeVND: 8000000,
@@ -197,7 +197,7 @@ async function main() {
     },
     {
       code: "ZYGOMATIC",
-      nameVi: "Implant xuong go ma (Zygomatic)",
+      nameVi: "Implant xương gò má (Zygomatic)",
       nameEn: "Zygomatic Implant",
       category: "COMPLEX_IMPLANT" as const,
       defaultFeeVND: 15000000,
@@ -205,7 +205,7 @@ async function main() {
     },
     {
       code: "PTERYGOID",
-      nameVi: "Implant xuong chan buom (Pterygoid)",
+      nameVi: "Implant xương chân bướm (Pterygoid)",
       nameEn: "Pterygoid Implant",
       category: "COMPLEX_IMPLANT" as const,
       defaultFeeVND: 11000000,
@@ -213,7 +213,7 @@ async function main() {
     },
     {
       code: "REMOVE_OLD_IMPLANT",
-      nameVi: "Thao implant cu",
+      nameVi: "Tháo implant cũ",
       nameEn: "Remove Old Implant",
       category: "IMPLANT_PLACEMENT" as const,
       defaultFeeVND: 1000000,
@@ -221,7 +221,7 @@ async function main() {
     },
     {
       code: "REMOVE_IMPLANT_GRAFT",
-      nameVi: "Thao implant cu + ghep xuong",
+      nameVi: "Tháo implant cũ + ghép xương",
       nameEn: "Remove Implant + Bone Graft",
       category: "IMPLANT_PLACEMENT" as const,
       defaultFeeVND: 3000000,
@@ -229,7 +229,7 @@ async function main() {
     },
     {
       code: "CROWN_LENGTHENING",
-      nameVi: "Cat nuou / cuoi ho loi + mai chinh xuong",
+      nameVi: "Cắt nướu / cười hở lợi + mài chỉnh xương",
       nameEn: "Crown Lengthening / Gummy Smile",
       category: "OTHER" as const,
       defaultFeeVND: 1000000,
@@ -237,7 +237,7 @@ async function main() {
     },
     {
       code: "FULL_ARCH_DENTURE",
-      nameVi: "Lay dau + phuc hinh ham gia tren implant",
+      nameVi: "Lấy dấu + phục hình hàm giả trên implant",
       nameEn: "Full Arch Denture on Implant",
       category: "PROSTHETIC" as const,
       defaultFeeVND: 4000000,

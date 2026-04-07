@@ -51,10 +51,10 @@ function stockStatusColor(item: ItemDetail) {
 
 function stockStatusBadge(item: ItemDetail) {
   if (item.currentStock <= 0)
-    return { label: "Het hang", variant: "destructive" as const };
+    return { label: "Hết hàng", variant: "destructive" as const };
   if (item.currentStock <= item.minimumStock)
-    return { label: "Sap het", variant: "secondary" as const };
-  return { label: "Du hang", variant: "default" as const };
+    return { label: "Sắp hết", variant: "secondary" as const };
+  return { label: "Đủ hàng", variant: "default" as const };
 }
 
 export default async function InventoryDetailPage({
@@ -93,7 +93,7 @@ export default async function InventoryDetailPage({
           render={<Link href={`/inventory/${item.id}/edit`} />}
         >
           <Pencil data-icon="inline-start" />
-          Chinh sua
+          Chỉnh sửa
         </Button>
       </div>
 
@@ -101,23 +101,23 @@ export default async function InventoryDetailPage({
         {/* Item Info Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Thong tin vat tu</CardTitle>
+            <CardTitle>Thông tin vật tư</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <InfoRow label="Ten" value={item.name} />
-            <InfoRow label="Thuong hieu" value={item.brand || "—"} />
+            <InfoRow label="Tên" value={item.name} />
+            <InfoRow label="Thương hiệu" value={item.brand || "—"} />
             <InfoRow
-              label="Danh muc"
+              label="Danh mục"
               value={
                 INVENTORY_CATEGORY_LABELS[item.category] || item.category
               }
             />
-            <InfoRow label="So lo" value={item.lotNumber || "—"} />
-            <InfoRow label="So seri" value={item.serialNumber || "—"} />
-            <InfoRow label="Don vi" value={item.unit} />
-            <InfoRow label="Don gia" value={formatVND(item.unitCostVND)} />
+            <InfoRow label="Số lô" value={item.lotNumber || "—"} />
+            <InfoRow label="Số seri" value={item.serialNumber || "—"} />
+            <InfoRow label="Đơn vị" value={item.unit} />
+            <InfoRow label="Đơn giá" value={formatVND(item.unitCostVND)} />
             <InfoRow
-              label="Han su dung"
+              label="Hạn sử dụng"
               value={
                 item.expiryDate
                   ? format(item.expiryDate, "dd/MM/yyyy")
@@ -128,7 +128,7 @@ export default async function InventoryDetailPage({
               <>
                 <Separator />
                 <div className="text-sm">
-                  <span className="text-muted-foreground">Thong so:</span>
+                  <span className="text-muted-foreground">Thông số:</span>
                   <p className="mt-1 whitespace-pre-wrap font-medium">
                     {typeof item.specifications === "string"
                       ? item.specifications
@@ -143,17 +143,17 @@ export default async function InventoryDetailPage({
         {/* Stock Status Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Trang thai ton kho</CardTitle>
+            <CardTitle>Trạng thái tồn kho</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Trang thai</span>
+              <span className="text-sm text-muted-foreground">Trạng thái</span>
               <Badge variant={status.variant}>{status.label}</Badge>
             </div>
 
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
-                Ton kho hien tai
+                Tồn kho hiện tại
               </span>
               <span
                 className={`text-3xl font-bold ${stockStatusColor(item)}`}
@@ -164,7 +164,7 @@ export default async function InventoryDetailPage({
 
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
-                Ton kho toi thieu
+                Tồn kho tối thiểu
               </span>
               <span className="text-lg font-medium">{item.minimumStock}</span>
             </div>
@@ -195,8 +195,8 @@ export default async function InventoryDetailPage({
             </div>
 
             <InfoRow
-              label="Trang thai hoat dong"
-              value={item.isActive ? "Dang su dung" : "Ngung su dung"}
+              label="Trạng thái hoạt động"
+              value={item.isActive ? "Đang sử dụng" : "Ngừng sử dụng"}
             />
           </CardContent>
         </Card>
@@ -206,24 +206,24 @@ export default async function InventoryDetailPage({
       <Card>
         <CardHeader>
           <CardTitle>
-            Lich su su dung ({item.usages.length})
+            Lịch sử sử dụng ({item.usages.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {item.usages.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co lich su su dung vat tu nay.
+              Chưa có lịch sử sử dụng vật tư này.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ngay</TableHead>
-                  <TableHead>Benh nhan</TableHead>
-                  <TableHead>Thu thuat</TableHead>
-                  <TableHead className="text-right">So luong</TableHead>
-                  <TableHead className="text-right">Chi phi</TableHead>
-                  <TableHead>Ghi chu</TableHead>
+                  <TableHead>Ngày</TableHead>
+                  <TableHead>Bệnh nhân</TableHead>
+                  <TableHead>Thủ thuật</TableHead>
+                  <TableHead className="text-right">Số lượng</TableHead>
+                  <TableHead className="text-right">Chi phí</TableHead>
+                  <TableHead>Ghi chú</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

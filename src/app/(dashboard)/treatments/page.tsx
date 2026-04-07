@@ -102,13 +102,13 @@ export default async function TreatmentsPage({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Benh nhan</TableHead>
-                  <TableHead>Bac si</TableHead>
-                  <TableHead>Loai</TableHead>
-                  <TableHead>Trang thai</TableHead>
-                  <TableHead>Rang</TableHead>
-                  <TableHead className="text-center">Tien do</TableHead>
-                  <TableHead>Ngay bat dau</TableHead>
+                  <TableHead>Bệnh nhân</TableHead>
+                  <TableHead>Bác sĩ</TableHead>
+                  <TableHead>Loại</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Răng</TableHead>
+                  <TableHead className="text-center">Tiến độ</TableHead>
+                  <TableHead>Ngày bắt đầu</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

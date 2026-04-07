@@ -105,7 +105,7 @@ export default function DebtsPage() {
 
   async function handleRecordPayment() {
     if (!payClinicId || !payAmount) {
-      setError("Vui long chon phong kham va nhap so tien");
+      setError("Vui lòng chọn phòng khám và nhập số tiền");
       return;
     }
     setSubmitting(true);
@@ -125,7 +125,7 @@ export default function DebtsPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Khong the ghi nhan thanh toan");
+        setError(data.error || "Không thể ghi nhận thanh toán");
         setSubmitting(false);
         return;
       }
@@ -146,7 +146,7 @@ export default function DebtsPage() {
         loadClinicDetail(payClinicId);
       }
     } catch {
-      setError("Loi ket noi");
+      setError("Lỗi kết nối");
     }
     setSubmitting(false);
   }
@@ -156,36 +156,36 @@ export default function DebtsPage() {
       <div>
         <Button variant="ghost" size="sm" render={<Link href="/finance" />}>
           <ArrowLeft data-icon="inline-start" />
-          Quay lai tai chinh
+          Quay lại tài chính
         </Button>
       </div>
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Cong no phong kham</h1>
+          <h1 className="text-2xl font-bold">Công nợ phòng khám</h1>
           <p className="text-muted-foreground">
-            Theo doi cong no va ghi nhan thanh toan tu phong kham
+            Theo dõi công nợ và ghi nhận thanh toán từ phòng khám
           </p>
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger render={<Button />}>
             <Plus data-icon="inline-start" />
-            Ghi nhan thanh toan
+            Ghi nhận thanh toán
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Ghi nhan thanh toan</DialogTitle>
+              <DialogTitle>Ghi nhận thanh toán</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label>Phong kham</Label>
+                <Label>Phòng khám</Label>
                 <Select
                   value={payClinicId}
                   onValueChange={(val: string | null) => setPayClinicId(val || "")}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Chon phong kham" />
+                    <SelectValue placeholder="Chọn phòng khám" />
                   </SelectTrigger>
                   <SelectContent>
                     {clinics.map((c) => (
@@ -198,7 +198,7 @@ export default function DebtsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>So tien (VND)</Label>
+                <Label>Số tiền (VND)</Label>
                 <Input
                   type="number"
                   placeholder="0"
@@ -208,7 +208,7 @@ export default function DebtsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Ngay thanh toan</Label>
+                <Label>Ngày thanh toán</Label>
                 <Input
                   type="date"
                   value={payDate}
@@ -217,9 +217,9 @@ export default function DebtsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Ghi chu</Label>
+                <Label>Ghi chú</Label>
                 <Textarea
-                  placeholder="VD: Chuyen khoan ngay 15/03, so tham chieu CK-123"
+                  placeholder="VD: Chuyển khoản ngày 15/03, số tham chiếu CK-123"
                   value={payNotes}
                   onChange={(e) => setPayNotes(e.target.value)}
                 />
@@ -234,7 +234,7 @@ export default function DebtsPage() {
                 onClick={handleRecordPayment}
                 disabled={submitting}
               >
-                {submitting ? "Dang ghi nhan..." : "Ghi nhan thanh toan"}
+                {submitting ? "Đang ghi nhận..." : "Ghi nhận thanh toán"}
               </Button>
             </div>
           </DialogContent>
@@ -244,23 +244,23 @@ export default function DebtsPage() {
       {/* Debt summary table */}
       <Card>
         <CardHeader>
-          <CardTitle>Tong hop cong no</CardTitle>
+          <CardTitle>Tổng hợp công nợ</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="text-center text-muted-foreground py-8">Dang tai...</p>
+            <p className="text-center text-muted-foreground py-8">Đang tải...</p>
           ) : summary.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co du lieu cong no.
+              Chưa có dữ liệu công nợ.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Phong kham</TableHead>
-                  <TableHead className="text-right">Tong phai thu</TableHead>
-                  <TableHead className="text-right">Da thanh toan</TableHead>
-                  <TableHead className="text-right">Con no</TableHead>
+                  <TableHead>Phòng khám</TableHead>
+                  <TableHead className="text-right">Tổng phải thu</TableHead>
+                  <TableHead className="text-right">Đã thanh toán</TableHead>
+                  <TableHead className="text-right">Còn nợ</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -287,7 +287,7 @@ export default function DebtsPage() {
                         size="sm"
                         onClick={() => loadClinicDetail(s.clinicId)}
                       >
-                        Chi tiet
+                        Chi tiết
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -303,21 +303,21 @@ export default function DebtsPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              Lich su cong no: {clinicDebt?.clinicName || "..."}
+              Lịch sử công nợ: {clinicDebt?.clinicName || "..."}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {detailLoading ? (
-              <p className="text-center text-muted-foreground py-6">Dang tai...</p>
+              <p className="text-center text-muted-foreground py-6">Đang tải...</p>
             ) : clinicDebt && clinicDebt.records.length > 0 ? (
               <>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Ngay</TableHead>
-                      <TableHead>Loai</TableHead>
-                      <TableHead className="text-right">So tien</TableHead>
-                      <TableHead>Ghi chu</TableHead>
+                      <TableHead>Ngày</TableHead>
+                      <TableHead>Loại</TableHead>
+                      <TableHead className="text-right">Số tiền</TableHead>
+                      <TableHead>Ghi chú</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -328,9 +328,9 @@ export default function DebtsPage() {
                         </TableCell>
                         <TableCell>
                           {r.type === "CHARGE" ? (
-                            <span className="text-destructive font-medium">Phat sinh</span>
+                            <span className="text-destructive font-medium">Phát sinh</span>
                           ) : (
-                            <span className="text-green-600 font-medium">Thanh toan</span>
+                            <span className="text-green-600 font-medium">Thanh toán</span>
                           )}
                         </TableCell>
                         <TableCell className="text-right font-medium">
@@ -349,15 +349,15 @@ export default function DebtsPage() {
 
                 <div className="flex justify-end gap-8 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Tong phai thu: </span>
+                    <span className="text-muted-foreground">Tổng phải thu:</span>
                     <span className="font-semibold">{formatVND(clinicDebt.totalCharged)}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Da tra: </span>
+                    <span className="text-muted-foreground">Đã trả:</span>
                     <span className="font-semibold">{formatVND(clinicDebt.totalPaid)}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Con no: </span>
+                    <span className="text-muted-foreground">Còn nợ:</span>
                     <span
                       className={`font-bold ${
                         clinicDebt.balance > 0 ? "text-destructive" : "text-green-600"
@@ -370,7 +370,7 @@ export default function DebtsPage() {
               </>
             ) : (
               <p className="text-center text-muted-foreground py-6">
-                Chua co giao dich nao.
+                Chưa có giao dịch nào.
               </p>
             )}
           </CardContent>

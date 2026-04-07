@@ -34,11 +34,11 @@ import {
 import { ArrowLeft, Plus } from "lucide-react";
 
 const INVOICE_STATUS_LABELS: Record<string, string> = {
-  DRAFT: "Nhap",
-  ISSUED: "Da phat hanh",
-  PARTIALLY_PAID: "Thanh toan 1 phan",
-  PAID: "Da thanh toan",
-  OVERDUE: "Qua han",
+  DRAFT: "Nháp",
+  ISSUED: "Đã phát hành",
+  PARTIALLY_PAID: "Thanh toán 1 phần",
+  PAID: "Đã thanh toán",
+  OVERDUE: "Quá hạn",
 };
 
 const INVOICE_STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -93,7 +93,7 @@ export default function InvoicesPage() {
 
   async function handleGenerate() {
     if (!selectedClinic) {
-      setError("Vui long chon phong kham");
+      setError("Vui lòng chọn phòng khám");
       return;
     }
     setGenerating(true);
@@ -112,7 +112,7 @@ export default function InvoicesPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Khong the tao hoa don");
+        setError(data.error || "Không thể tạo hóa đơn");
         setGenerating(false);
         return;
       }
@@ -121,7 +121,7 @@ export default function InvoicesPage() {
       setDialogOpen(false);
       router.push(`/finance/invoices/${invoice.id}`);
     } catch {
-      setError("Loi ket noi");
+      setError("Lỗi kết nối");
       setGenerating(false);
     }
   }
@@ -131,36 +131,36 @@ export default function InvoicesPage() {
       <div>
         <Button variant="ghost" size="sm" render={<Link href="/finance" />}>
           <ArrowLeft data-icon="inline-start" />
-          Quay lai tai chinh
+          Quay lại tài chính
         </Button>
       </div>
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Hoa don</h1>
+          <h1 className="text-2xl font-bold">Hóa đơn</h1>
           <p className="text-muted-foreground">
-            Quan ly hoa don hang thang cho phong kham
+            Quản lý hóa đơn hàng tháng cho phòng khám
           </p>
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger render={<Button />}>
             <Plus data-icon="inline-start" />
-            Tao hoa don
+            Tạo hóa đơn
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Tao hoa don moi</DialogTitle>
+              <DialogTitle>Tạo hóa đơn mới</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label>Phong kham</Label>
+                <Label>Phòng khám</Label>
                 <Select
                   value={selectedClinic}
                   onValueChange={(val: string | null) => setSelectedClinic(val || "")}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Chon phong kham" />
+                    <SelectValue placeholder="Chọn phòng khám" />
                   </SelectTrigger>
                   <SelectContent>
                     {clinics.map((c) => (
@@ -174,7 +174,7 @@ export default function InvoicesPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Thang</Label>
+                  <Label>Tháng</Label>
                   <Select
                     value={periodMonth}
                     onValueChange={(val: string | null) => setPeriodMonth(val || periodMonth)}
@@ -185,14 +185,14 @@ export default function InvoicesPage() {
                     <SelectContent>
                       {Array.from({ length: 12 }, (_, i) => (
                         <SelectItem key={i + 1} value={String(i + 1)}>
-                          Thang {i + 1}
+                          Tháng {i + 1}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Nam</Label>
+                  <Label>Năm</Label>
                   <Input
                     type="number"
                     value={periodYear}
@@ -210,7 +210,7 @@ export default function InvoicesPage() {
                 onClick={handleGenerate}
                 disabled={generating}
               >
-                {generating ? "Dang tao..." : "Tao hoa don"}
+                {generating ? "Đang tạo..." : "Tạo hóa đơn"}
               </Button>
             </div>
           </DialogContent>
@@ -219,25 +219,25 @@ export default function InvoicesPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Danh sach hoa don</CardTitle>
+          <CardTitle>Danh sách hóa đơn</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="text-center text-muted-foreground py-8">Dang tai...</p>
+            <p className="text-center text-muted-foreground py-8">Đang tải...</p>
           ) : invoices.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chua co hoa don nao.
+              Chưa có hóa đơn nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ma hoa don</TableHead>
-                  <TableHead>Phong kham</TableHead>
-                  <TableHead>Ky</TableHead>
-                  <TableHead className="text-right">So tien</TableHead>
-                  <TableHead>Trang thai</TableHead>
-                  <TableHead>Ngay phat hanh</TableHead>
+                  <TableHead>Mã hóa đơn</TableHead>
+                  <TableHead>Phòng khám</TableHead>
+                  <TableHead>Kỳ</TableHead>
+                  <TableHead className="text-right">Số tiền</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Ngày phát hành</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -19,10 +19,10 @@ import type { ContractStatus, ProcedureCategory } from "@prisma/client";
 import { FeeScheduleEditor } from "./fee-schedule-editor";
 
 const CONTRACT_STATUS_LABELS: Record<ContractStatus, string> = {
-  DRAFT: "Nhap",
-  ACTIVE: "Hoat dong",
-  SUSPENDED: "Tam ngung",
-  TERMINATED: "Da cham dut",
+  DRAFT: "Nháp",
+  ACTIVE: "Hoạt động",
+  SUSPENDED: "Tạm ngừng",
+  TERMINATED: "Đã chấm dứt",
 };
 
 const CONTRACT_STATUS_VARIANT: Record<
@@ -100,7 +100,7 @@ export default async function ContractDetailPage({
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Chi tiet hop dong</h1>
+          <h1 className="text-2xl font-bold">Chi tiết hợp đồng</h1>
           <p className="text-muted-foreground">
             {contract.doctor.fullName} — {contract.clinic.name}
           </p>
@@ -112,56 +112,56 @@ export default async function ContractDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Thong tin hop dong
+            Thông tin hợp đồng
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div>
-              <p className="text-sm text-muted-foreground">Bac si</p>
+              <p className="text-sm text-muted-foreground">Bác sĩ</p>
               <p className="font-medium">{contract.doctor.fullName}</p>
               <p className="text-sm text-muted-foreground">
                 {contract.doctor.user.email}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Phong kham</p>
+              <p className="text-sm text-muted-foreground">Phòng khám</p>
               <p className="font-medium">{contract.clinic.name}</p>
               <p className="text-sm text-muted-foreground">
                 {contract.clinic.address}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">So hop dong</p>
+              <p className="text-sm text-muted-foreground">Số hợp đồng</p>
               <p className="font-medium">
                 {contract.contractNumber || (
-                  <span className="text-muted-foreground">Chua co</span>
+                  <span className="text-muted-foreground">Chưa có</span>
                 )}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Ngay bat dau</p>
+              <p className="text-sm text-muted-foreground">Ngày bắt đầu</p>
               <p className="font-medium">
                 {new Date(contract.startDate).toLocaleDateString("vi-VN")}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Ngay ket thuc</p>
+              <p className="text-sm text-muted-foreground">Ngày kết thúc</p>
               <p className="font-medium">
                 {contract.endDate
                   ? new Date(contract.endDate).toLocaleDateString("vi-VN")
-                  : "Chua xac dinh"}
+                  : "Chưa xác định"}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Trang thai</p>
+              <p className="text-sm text-muted-foreground">Trạng thái</p>
               <Badge variant={CONTRACT_STATUS_VARIANT[contract.status]}>
                 {CONTRACT_STATUS_LABELS[contract.status]}
               </Badge>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">
-                Thoi han bao truoc cham dut
+                Thời hạn báo trước chấm dứt
               </p>
               <p className="font-medium">
                 {contract.terminationNoticeMonths} thang
@@ -176,27 +176,27 @@ export default async function ContractDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5" />
-            Bang phi thu thuat ({contract.feeSchedules.length} muc tuy chinh)
+            Bảng phí thủ thuật ({contract.feeSchedules.length} mục tùy chỉnh)
           </CardTitle>
         </CardHeader>
         <CardContent>
           {procedureRows.length === 0 ? (
             <p className="text-center py-8 text-muted-foreground">
-              Chua co loai thu thuat nao trong he thong.
+              Chưa có loại thủ thuật nào trong hệ thống.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ma</TableHead>
-                  <TableHead>Thu thuat</TableHead>
-                  <TableHead>Nhom</TableHead>
-                  <TableHead className="text-right">Phi mac dinh</TableHead>
+                  <TableHead>Mã</TableHead>
+                  <TableHead>Thủ thuật</TableHead>
+                  <TableHead>Nhóm</TableHead>
+                  <TableHead className="text-right">Phí mặc định</TableHead>
                   <TableHead className="text-right">
-                    Phi hop dong
+                    Phí hợp đồng
                   </TableHead>
-                  <TableHead>Ghi chu</TableHead>
-                  <TableHead className="text-center">Thao tac</TableHead>
+                  <TableHead>Ghi chú</TableHead>
+                  <TableHead className="text-center">Thao tác</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

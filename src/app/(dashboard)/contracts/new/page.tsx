@@ -20,9 +20,9 @@ import { ArrowLeft, Loader2, FileText } from "lucide-react";
 import Link from "next/link";
 
 const contractSchema = z.object({
-  doctorId: z.string().min(1, "Vui long chon bac si"),
-  clinicId: z.string().min(1, "Vui long chon phong kham"),
-  startDate: z.string().min(1, "Ngay bat dau la bat buoc"),
+  doctorId: z.string().min(1, "Vui lòng chọn bác sĩ"),
+  clinicId: z.string().min(1, "Vui lòng chọn phòng khám"),
+  startDate: z.string().min(1, "Ngày bắt đầu là bắt buộc"),
   contractNumber: z.string().optional(),
 });
 
@@ -77,7 +77,7 @@ export default function NewContractPage() {
           setClinics(clinicsData);
         }
       } catch {
-        setServerError("Khong the tai du lieu bac si va phong kham");
+        setServerError("Không thể tải dữ liệu bác sĩ và phòng khám");
       } finally {
         setLoadingData(false);
       }
@@ -97,14 +97,14 @@ export default function NewContractPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        setServerError(err.error || "Co loi xay ra");
+        setServerError(err.error || "Có lỗi xảy ra");
         return;
       }
 
       const contract = await res.json();
       router.push(`/contracts/${contract.id}`);
     } catch {
-      setServerError("Khong the ket noi den server");
+      setServerError("Không thể kết nối đến server");
     }
   };
 
@@ -112,7 +112,7 @@ export default function NewContractPage() {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        <span className="ml-2 text-muted-foreground">Dang tai du lieu...</span>
+        <span className="ml-2 text-muted-foreground">Đang tải dữ liệu...</span>
       </div>
     );
   }
@@ -124,9 +124,9 @@ export default function NewContractPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Tao hop dong moi</h1>
+          <h1 className="text-2xl font-bold">Tạo hợp đồng mới</h1>
           <p className="text-muted-foreground">
-            Lien ket bac si voi phong kham
+            Liên kết bác sĩ với phòng khám
           </p>
         </div>
       </div>
@@ -142,19 +142,19 @@ export default function NewContractPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              Thong tin hop dong
+              Thông tin hợp đồng
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label>Bac si *</Label>
+              <Label>Bác sĩ *</Label>
               <input type="hidden" {...register("doctorId")} />
               <Select
                 value=""
                 onValueChange={(val) => { if (val) setValue("doctorId", val, { shouldValidate: true }); }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chon bac si" />
+                  <SelectValue placeholder="Chọn bác sĩ" />
                 </SelectTrigger>
                 <SelectContent>
                   {doctors.map((doctor) => (
@@ -172,14 +172,14 @@ export default function NewContractPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Phong kham *</Label>
+              <Label>Phòng khám *</Label>
               <input type="hidden" {...register("clinicId")} />
               <Select
                 value=""
                 onValueChange={(val) => { if (val) setValue("clinicId", val, { shouldValidate: true }); }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chon phong kham" />
+                  <SelectValue placeholder="Chọn phòng khám" />
                 </SelectTrigger>
                 <SelectContent>
                   {clinics.map((clinic) => (
@@ -197,7 +197,7 @@ export default function NewContractPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="startDate">Ngay bat dau *</Label>
+              <Label htmlFor="startDate">Ngày bắt đầu *</Label>
               <Input
                 id="startDate"
                 type="date"
@@ -211,7 +211,7 @@ export default function NewContractPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="contractNumber">So hop dong</Label>
+              <Label htmlFor="contractNumber">Số hợp đồng</Label>
               <Input
                 id="contractNumber"
                 placeholder="VD: HD-2024-001"
@@ -223,11 +223,11 @@ export default function NewContractPage() {
 
         <div className="flex justify-end gap-3">
           <Button variant="outline" type="button" render={<Link href="/contracts" />}>
-            Huy
+            Hủy
           </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Tao hop dong
+            Tạo hợp đồng
           </Button>
         </div>
       </form>

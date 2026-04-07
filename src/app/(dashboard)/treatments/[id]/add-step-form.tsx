@@ -59,7 +59,7 @@ export function AddStepForm({
     setError("");
 
     if (!procedureTypeId) {
-      setError("Vui long chon loai thu thuat");
+      setError("Vui lòng chọn loại thủ thuật");
       return;
     }
 
@@ -81,7 +81,7 @@ export function AddStepForm({
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Loi khi them buoc dieu tri");
+        throw new Error(data.error || "Lỗi khi thêm bước điều trị");
       }
 
       resetForm();
@@ -89,7 +89,7 @@ export function AddStepForm({
       router.refresh();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Loi khi them buoc dieu tri"
+        err instanceof Error ? err.message : "Lỗi khi thêm bước điều trị"
       );
     } finally {
       setLoading(false);
@@ -111,7 +111,7 @@ export function AddStepForm({
     return (
       <Button onClick={() => setShowForm(true)} variant="outline">
         <Plus data-icon="inline-start" />
-        Them buoc moi
+        Thêm bước mới
       </Button>
     );
   }
@@ -125,13 +125,13 @@ export function AddStepForm({
       )}
 
       <div className="space-y-2">
-        <Label>Loai thu thuat *</Label>
+        <Label>Loại thủ thuật *</Label>
         <Select
           value={procedureTypeId}
           onValueChange={(v) => setProcedureTypeId(v ?? "")}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Chon thu thuat" />
+            <SelectValue placeholder="Chọn thủ thuật" />
           </SelectTrigger>
           <SelectContent>
             {Object.entries(grouped).map(([category, types]) => (
@@ -152,7 +152,7 @@ export function AddStepForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="step-quantity">So luong</Label>
+          <Label htmlFor="step-quantity">Số lượng</Label>
           <Input
             id="step-quantity"
             type="number"
@@ -163,7 +163,7 @@ export function AddStepForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="step-scheduledDate">Ngay dat lich</Label>
+          <Label htmlFor="step-scheduledDate">Ngày đặt lịch</Label>
           <Input
             id="step-scheduledDate"
             type="date"
@@ -174,7 +174,7 @@ export function AddStepForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="step-toothNumbers">So rang</Label>
+        <Label htmlFor="step-toothNumbers">Số răng</Label>
         <Input
           id="step-toothNumbers"
           value={toothNumbers}
@@ -184,19 +184,19 @@ export function AddStepForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="step-notes">Ghi chu</Label>
+        <Label htmlFor="step-notes">Ghi chú</Label>
         <Textarea
           id="step-notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Ghi chu ve buoc dieu tri..."
+          placeholder="Ghi chú về bước điều trị..."
           rows={3}
         />
       </div>
 
       <div className="flex gap-3">
         <Button type="submit" disabled={loading}>
-          {loading ? "Dang them..." : "Them buoc"}
+          {loading ? "Đang thêm..." : "Thêm bước"}
         </Button>
         <Button
           type="button"
@@ -207,7 +207,7 @@ export function AddStepForm({
           }}
         >
           <X data-icon="inline-start" />
-          Huy
+          Hủy
         </Button>
       </div>
     </form>

@@ -27,9 +27,9 @@ import {
 } from "lucide-react";
 
 const PAYMENT_STATUS_LABELS: Record<string, string> = {
-  PENDING: "Cho duyet",
-  APPROVED: "Da duyet",
-  PAID: "Da chi",
+  PENDING: "Chờ duyệt",
+  APPROVED: "Đã duyệt",
+  PAID: "Đã chi",
 };
 
 const PAYMENT_STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -120,19 +120,19 @@ export default function VoucherDetailPage() {
   }
 
   if (loading) {
-    return <p className="text-center text-muted-foreground py-12">Dang tai...</p>;
+    return <p className="text-center text-muted-foreground py-12">Đang tải...</p>;
   }
 
   if (!voucher) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Khong tim thay phieu chi.</p>
+        <p className="text-muted-foreground">Không tìm thấy phiếu chi.</p>
         <Button
           variant="ghost"
           className="mt-4"
           render={<Link href="/finance/payments" />}
         >
-          Quay lai
+          Quay lại
         </Button>
       </div>
     );
@@ -143,7 +143,7 @@ export default function VoucherDetailPage() {
       <div>
         <Button variant="ghost" size="sm" render={<Link href="/finance/payments" />}>
           <ArrowLeft data-icon="inline-start" />
-          Quay lai danh sach phieu chi
+          Quay lại danh sách phiếu chi
         </Button>
       </div>
 
@@ -157,7 +157,7 @@ export default function VoucherDetailPage() {
             </Badge>
           </div>
           <p className="text-muted-foreground">
-            Ky: Thang {String(voucher.periodMonth).padStart(2, "0")}/{voucher.periodYear}
+            Kỳ: Tháng {String(voucher.periodMonth).padStart(2, "0")}/{voucher.periodYear}
           </p>
         </div>
 
@@ -165,13 +165,13 @@ export default function VoucherDetailPage() {
           {voucher.status === "PENDING" && (
             <Button onClick={handleApprove} disabled={updating}>
               <CheckCircle2 data-icon="inline-start" />
-              {updating ? "Dang xu ly..." : "Duyet phieu chi"}
+              {updating ? "Đang xử lý..." : "Duyệt phiếu chi"}
             </Button>
           )}
           {voucher.status === "APPROVED" && (
             <div className="flex items-end gap-2">
               <div className="space-y-1">
-                <Label className="text-xs">Ma chuyen khoan</Label>
+                <Label className="text-xs">Mã chuyển khoản</Label>
                 <Input
                   placeholder="VD: CK-123456"
                   value={bankRef}
@@ -181,7 +181,7 @@ export default function VoucherDetailPage() {
               </div>
               <Button onClick={handleMarkPaid} disabled={updating || !bankRef.trim()}>
                 <CreditCard data-icon="inline-start" />
-                {updating ? "Dang xu ly..." : "Xac nhan da chi"}
+                {updating ? "Đang xử lý..." : "Xác nhận đã chi"}
               </Button>
             </div>
           )}
@@ -194,7 +194,7 @@ export default function VoucherDetailPage() {
           <CardContent className="flex items-start gap-3 pt-6">
             <User className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Bac si</p>
+              <p className="text-sm font-medium text-muted-foreground">Bác sĩ</p>
               <p className="font-semibold">{voucher.doctor.fullName}</p>
               {voucher.doctor.phone && (
                 <p className="text-sm text-muted-foreground">DT: {voucher.doctor.phone}</p>
@@ -210,7 +210,7 @@ export default function VoucherDetailPage() {
           <CardContent className="flex items-start gap-3 pt-6">
             <Banknote className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Thong tin ngan hang</p>
+              <p className="text-sm font-medium text-muted-foreground">Thông tin ngân hàng</p>
               {voucher.doctor.bankAccount ? (
                 <>
                   <p className="font-semibold">{voucher.doctor.bankAccount}</p>
@@ -219,16 +219,16 @@ export default function VoucherDetailPage() {
                   </p>
                 </>
               ) : (
-                <p className="text-sm text-muted-foreground">Chua cap nhat</p>
+                <p className="text-sm text-muted-foreground">Chưa cập nhật</p>
               )}
               {voucher.bankTransferRef && (
                 <p className="mt-1 text-sm text-green-600">
-                  Ma CK: {voucher.bankTransferRef}
+                  Mã CK: {voucher.bankTransferRef}
                 </p>
               )}
               {voucher.paidDate && (
                 <p className="text-sm text-green-600">
-                  Ngay chi: {new Date(voucher.paidDate).toLocaleDateString("vi-VN")}
+                  Ngày chi: {new Date(voucher.paidDate).toLocaleDateString("vi-VN")}
                 </p>
               )}
             </div>
@@ -239,18 +239,18 @@ export default function VoucherDetailPage() {
       {/* Line items */}
       <Card>
         <CardHeader>
-          <CardTitle>Chi tiet cac buoc dieu tri</CardTitle>
+          <CardTitle>Chi tiết các bước điều trị</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[40px]">#</TableHead>
-                <TableHead>Phong kham</TableHead>
-                <TableHead>Benh nhan</TableHead>
-                <TableHead>Thu thuat</TableHead>
-                <TableHead>Ngay</TableHead>
-                <TableHead className="text-right">So tien</TableHead>
+                <TableHead>Phòng khám</TableHead>
+                <TableHead>Bệnh nhân</TableHead>
+                <TableHead>Thủ thuật</TableHead>
+                <TableHead>Ngày</TableHead>
+                <TableHead className="text-right">Số tiền</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -276,25 +276,25 @@ export default function VoucherDetailPage() {
       {/* Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Tong hop chi tra</CardTitle>
+          <CardTitle>Tổng hợp chi trả</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3 max-w-sm ml-auto">
             <div className="flex justify-between text-sm">
-              <span>Tong thu nhap</span>
+              <span>Tổng thu nhập</span>
               <span className="font-medium">{formatVND(voucher.grossAmountVND)}</span>
             </div>
             <div className="flex justify-between text-sm text-destructive">
-              <span>Thue TNCN (10%)</span>
+              <span>Thuế TNCN (10%)</span>
               <span className="font-medium">-{formatVND(voucher.taxWithheldVND)}</span>
             </div>
             <div className="flex justify-between text-sm text-green-600">
-              <span>Phu cap cong tac</span>
+              <span>Phụ cấp công tác</span>
               <span className="font-medium">+{formatVND(voucher.travelAllowanceVND)}</span>
             </div>
             <Separator />
             <div className="flex justify-between text-lg font-bold">
-              <span>Thuc nhan</span>
+              <span>Thực nhận</span>
               <span>{formatVND(voucher.netAmountVND)}</span>
             </div>
           </div>

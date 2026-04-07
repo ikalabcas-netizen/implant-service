@@ -29,9 +29,9 @@ interface Doctor {
 }
 
 const ARCH_OPTIONS = [
-  { value: "upper", label: "Ham tren" },
-  { value: "lower", label: "Ham duoi" },
-  { value: "both", label: "Ca hai ham" },
+  { value: "upper", label: "Hàm trên" },
+  { value: "lower", label: "Hàm dưới" },
+  { value: "both", label: "Cả hai hàm" },
 ];
 
 const ALL_ON_TYPES = ["ALL_ON_4", "ALL_ON_5", "ALL_ON_6"];
@@ -69,7 +69,7 @@ export default function NewTreatmentPage() {
           setDoctors(data);
         }
       } catch {
-        console.error("Khong the tai du lieu");
+        console.error("Không thể tải dữ liệu");
       }
     }
     fetchData();
@@ -94,7 +94,7 @@ export default function NewTreatmentPage() {
     setError("");
 
     if (!patientId || !doctorId || !type) {
-      setError("Benh nhan, bac si va loai dieu tri la bat buoc");
+      setError("Bệnh nhân, bác sĩ và loại điều trị là bắt buộc");
       return;
     }
 
@@ -117,14 +117,14 @@ export default function NewTreatmentPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Loi khi tao ca dieu tri");
+        throw new Error(data.error || "Lỗi khi tạo ca điều trị");
       }
 
       const treatment = await res.json();
       router.push(`/treatments/${treatment.id}`);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Loi khi tao ca dieu tri"
+        err instanceof Error ? err.message : "Lỗi khi tạo ca điều trị"
       );
     } finally {
       setLoading(false);
@@ -136,15 +136,15 @@ export default function NewTreatmentPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Tao ca dieu tri moi</h1>
+        <h1 className="text-2xl font-bold">Tạo ca điều trị mới</h1>
         <p className="text-muted-foreground">
-          Nhap thong tin de bat dau ca dieu tri implant
+          Nhập thông tin để bắt đầu ca điều trị implant
         </p>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Thong tin ca dieu tri</CardTitle>
+          <CardTitle>Thông tin ca điều trị</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -155,13 +155,13 @@ export default function NewTreatmentPage() {
             )}
 
             <div className="space-y-2">
-              <Label>Benh nhan *</Label>
+              <Label>Bệnh nhân *</Label>
               <Select
                 value={patientId}
                 onValueChange={(v) => setPatientId(v ?? "")}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chon benh nhan" />
+                  <SelectValue placeholder="Chọn bệnh nhân" />
                 </SelectTrigger>
                 <SelectContent>
                   {patients.map((p) => (
@@ -174,13 +174,13 @@ export default function NewTreatmentPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Bac si *</Label>
+              <Label>Bác sĩ *</Label>
               <Select
                 value={doctorId}
                 onValueChange={(v) => setDoctorId(v ?? "")}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chon bac si" />
+                  <SelectValue placeholder="Chọn bác sĩ" />
                 </SelectTrigger>
                 <SelectContent>
                   {doctors.map((d) => (
@@ -194,16 +194,16 @@ export default function NewTreatmentPage() {
 
             {clinicName && (
               <div className="space-y-2">
-                <Label>Phong kham</Label>
+                <Label>Phòng khám</Label>
                 <Input value={clinicName} disabled />
               </div>
             )}
 
             <div className="space-y-2">
-              <Label>Loai dieu tri *</Label>
+              <Label>Loại điều trị *</Label>
               <Select value={type} onValueChange={(v) => setType(v ?? "")}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chon loai dieu tri" />
+                  <SelectValue placeholder="Chọn loại điều trị" />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(TREATMENT_TYPE_LABELS).map(([key, label]) => (
@@ -217,7 +217,7 @@ export default function NewTreatmentPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="toothNumbers">So rang</Label>
+                <Label htmlFor="toothNumbers">Số răng</Label>
                 <Input
                   id="toothNumbers"
                   value={toothNumbers}
@@ -227,7 +227,7 @@ export default function NewTreatmentPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="implantCount">So luong implant</Label>
+                <Label htmlFor="implantCount">Số lượng implant</Label>
                 <Input
                   id="implantCount"
                   type="number"
@@ -241,13 +241,13 @@ export default function NewTreatmentPage() {
 
             {showArchType && (
               <div className="space-y-2">
-                <Label>Loai ham</Label>
+                <Label>Loại hàm</Label>
                 <Select
                   value={archType}
                   onValueChange={(v) => setArchType(v ?? "")}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Chon loai ham" />
+                    <SelectValue placeholder="Chọn loại hàm" />
                   </SelectTrigger>
                   <SelectContent>
                     {ARCH_OPTIONS.map((opt) => (
@@ -261,26 +261,26 @@ export default function NewTreatmentPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="planNotes">Ghi chu ke hoach</Label>
+              <Label htmlFor="planNotes">Ghi chú kế hoạch</Label>
               <Textarea
                 id="planNotes"
                 value={planNotes}
                 onChange={(e) => setPlanNotes(e.target.value)}
-                placeholder="Ghi chu ve ke hoach dieu tri..."
+                placeholder="Ghi chú về kế hoạch điều trị..."
                 rows={4}
               />
             </div>
 
             <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={loading}>
-                {loading ? "Dang tao..." : "Tao ca dieu tri"}
+                {loading ? "Đang tạo..." : "Tạo ca điều trị"}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/treatments")}
               >
-                Huy
+                Hủy
               </Button>
             </div>
           </form>

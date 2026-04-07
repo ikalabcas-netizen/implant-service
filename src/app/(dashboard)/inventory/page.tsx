@@ -169,19 +169,19 @@ export default async function InventoryPage({
         <CardContent>
           {filteredItems.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Chưa có vật tư nào. Hay them vat tu moi.
+              Chưa có vật tư nào. Hãy thêm vật tư mới.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ten</TableHead>
-                  <TableHead>Thuong hieu</TableHead>
-                  <TableHead>Danh muc</TableHead>
-                  <TableHead>So lo</TableHead>
+                  <TableHead>Tên</TableHead>
+                  <TableHead>Thương hiệu</TableHead>
+                  <TableHead>Danh mục</TableHead>
+                  <TableHead>Số lô</TableHead>
                   <TableHead className="text-right">Tồn kho</TableHead>
-                  <TableHead className="text-right">Don gia</TableHead>
-                  <TableHead>Don vi</TableHead>
+                  <TableHead className="text-right">Đơn giá</TableHead>
+                  <TableHead>Đơn vị</TableHead>
                   <TableHead>Hạn sử dụng</TableHead>
                 </TableRow>
               </TableHeader>

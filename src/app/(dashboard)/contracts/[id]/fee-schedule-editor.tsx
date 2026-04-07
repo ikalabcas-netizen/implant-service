@@ -53,14 +53,14 @@ export function FeeScheduleEditor({
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Khong the luu");
+        setError(data.error || "Không thể lưu");
         return;
       }
 
       setIsEditing(false);
       router.refresh();
     } catch {
-      setError("Khong the ket noi den server");
+      setError("Không thể kết nối đến server");
     } finally {
       setSaving(false);
     }
@@ -90,7 +90,7 @@ export function FeeScheduleEditor({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md rounded-lg border bg-background p-6 shadow-lg">
-        <h3 className="text-lg font-semibold mb-1">Chinh sua phi thu thuat</h3>
+        <h3 className="text-lg font-semibold mb-1">Chỉnh sửa phí thủ thuật</h3>
         <p className="text-sm text-muted-foreground mb-4">
           {procedureCode} — {procedureName}
         </p>
@@ -104,29 +104,29 @@ export function FeeScheduleEditor({
         <div className="space-y-4">
           <div>
             <p className="text-sm text-muted-foreground mb-1">
-              Phi mac dinh: {formatVND(defaultFeeVND)}
+              Phí mặc định: {formatVND(defaultFeeVND)}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="feeVND">Phi hop dong (VND) *</Label>
+            <Label htmlFor="feeVND">Phí hợp đồng (VND) *</Label>
             <Input
               id="feeVND"
               type="number"
               min={0}
               value={feeVND}
               onChange={(e) => setFeeVND(e.target.value)}
-              placeholder="Nhap phi"
+              placeholder="Nhập phí"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Ghi chu</Label>
+            <Label htmlFor="notes">Ghi chú</Label>
             <Input
               id="notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="VD: Ap dung cho HCM"
+              placeholder="VD: Áp dụng cho HCM"
             />
           </div>
 
@@ -138,7 +138,7 @@ export function FeeScheduleEditor({
               disabled={saving}
             >
               <X className="mr-1 h-3.5 w-3.5" />
-              Huy
+              Hủy
             </Button>
             <Button size="sm" onClick={handleSave} disabled={saving}>
               {saving ? (
@@ -146,7 +146,7 @@ export function FeeScheduleEditor({
               ) : (
                 <Check className="mr-1 h-3.5 w-3.5" />
               )}
-              Luu
+              Lưu
             </Button>
           </div>
         </div>

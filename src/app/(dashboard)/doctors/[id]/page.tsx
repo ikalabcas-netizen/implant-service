@@ -25,17 +25,17 @@ import {
 } from "lucide-react";
 
 const CERTIFICATION_TYPE_LABELS: Record<string, string> = {
-  IMPLANT_SURGERY: "Phau thuat Implant",
-  PROSTHETIC: "Phuc hinh",
-  ORAL_SURGERY: "Phau thuat mieng",
+  IMPLANT_SURGERY: "Phẫu thuật Implant",
+  PROSTHETIC: "Phục hình",
+  ORAL_SURGERY: "Phẫu thuật miệng",
   OTHER: "Khac",
 };
 
 const CONTRACT_STATUS_LABELS: Record<string, string> = {
   DRAFT: "Nhap",
-  ACTIVE: "Hoat dong",
-  SUSPENDED: "Tam ngung",
-  TERMINATED: "Da cham dut",
+  ACTIVE: "Hoạt động",
+  SUSPENDED: "Tạm ngừng",
+  TERMINATED: "Đã chấm dứt",
 };
 
 function formatDate(date: Date | null | undefined): string {
@@ -85,13 +85,13 @@ export default async function DoctorDetailPage({
         <div className="flex-1">
           <h1 className="text-2xl font-bold">{doctor.fullName}</h1>
           <p className="text-muted-foreground">
-            {doctor.specialization || "Chua cap nhat chuyen khoa"}
+            {doctor.specialization || "Chưa cập nhật chuyên khoa"}
           </p>
         </div>
         {doctor.user.isActive ? (
-          <Badge variant="default">Hoat dong</Badge>
+          <Badge variant="default">Hoạt động</Badge>
         ) : (
-          <Badge variant="secondary">Ngung hoat dong</Badge>
+          <Badge variant="secondary">Ngừng hoạt động</Badge>
         )}
       </div>
 
@@ -100,7 +100,7 @@ export default async function DoctorDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Thong tin ca nhan
+            Thông tin cá nhân
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -112,16 +112,16 @@ export default async function DoctorDetailPage({
             />
             <InfoItem
               icon={<Phone className="h-4 w-4" />}
-              label="Dien thoai"
+              label="Điện thoại"
               value={doctor.phone}
             />
             <InfoItem
-              label="Ngay sinh"
+              label="Ngày sinh"
               value={formatDate(doctor.dateOfBirth)}
             />
-            <InfoItem label="So CMND/CCCD" value={doctor.idNumber} />
-            <InfoItem label="Ma so thue" value={doctor.taxId} />
-            <InfoItem label="Chuyen khoa" value={doctor.specialization} />
+            <InfoItem label="Số CMND/CCCD" value={doctor.idNumber} />
+            <InfoItem label="Mã số thuế" value={doctor.taxId} />
+            <InfoItem label="Chuyên khoa" value={doctor.specialization} />
           </div>
         </CardContent>
       </Card>
@@ -131,13 +131,13 @@ export default async function DoctorDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            Thong tin ngan hang
+            Thông tin ngân hàng
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
-            <InfoItem label="So tai khoan" value={doctor.bankAccount} />
-            <InfoItem label="Ngan hang" value={doctor.bankName} />
+            <InfoItem label="Số tài khoản" value={doctor.bankAccount} />
+            <InfoItem label="Ngân hàng" value={doctor.bankName} />
           </div>
         </CardContent>
       </Card>
@@ -147,16 +147,16 @@ export default async function DoctorDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MapPin className="h-5 w-5" />
-            Dia chi
+            Địa chỉ
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
             <InfoItem
-              label="Dia chi thuong tru"
+              label="Địa chỉ thường trú"
               value={doctor.permanentAddress}
             />
-            <InfoItem label="Dia chi hien tai" value={doctor.currentAddress} />
+            <InfoItem label="Địa chỉ hiện tại" value={doctor.currentAddress} />
           </div>
         </CardContent>
       </Card>
@@ -166,23 +166,23 @@ export default async function DoctorDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <ShieldCheck className="h-5 w-5" />
-            Chung chi ({doctor.certifications.length})
+            Chứng chỉ ({doctor.certifications.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {doctor.certifications.length === 0 ? (
             <p className="text-center py-4 text-muted-foreground">
-              Chua co chung chi nao.
+              Chưa có chứng chỉ nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ten chung chi</TableHead>
-                  <TableHead>Loai</TableHead>
-                  <TableHead>Noi cap</TableHead>
-                  <TableHead>Ngay cap</TableHead>
-                  <TableHead>Ngay het han</TableHead>
+                  <TableHead>Tên chứng chỉ</TableHead>
+                  <TableHead>Loại</TableHead>
+                  <TableHead>Nơi cấp</TableHead>
+                  <TableHead>Ngày cấp</TableHead>
+                  <TableHead>Ngày hết hạn</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -208,23 +208,23 @@ export default async function DoctorDetailPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
-            Hop dong phong kham ({doctor.clinicContracts.length})
+            Hợp đồng phòng khám ({doctor.clinicContracts.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {doctor.clinicContracts.length === 0 ? (
             <p className="text-center py-4 text-muted-foreground">
-              Chua co hop dong phong kham nao.
+              Chưa có hợp đồng phòng khám nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Phong kham</TableHead>
-                  <TableHead>So hop dong</TableHead>
-                  <TableHead>Ngay bat dau</TableHead>
-                  <TableHead>Ngay ket thuc</TableHead>
-                  <TableHead>Trang thai</TableHead>
+                  <TableHead>Phòng khám</TableHead>
+                  <TableHead>Số hợp đồng</TableHead>
+                  <TableHead>Ngày bắt đầu</TableHead>
+                  <TableHead>Ngày kết thúc</TableHead>
+                  <TableHead>Trạng thái</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -72,7 +72,7 @@ export default async function PatientDetailPage({
         <div>
           <h1 className="text-2xl font-bold">{patient.fullName}</h1>
           <p className="text-muted-foreground">
-            Phong kham: {patient.clinic.name}
+            Phòng khám: {patient.clinic.name}
           </p>
         </div>
       </div>
@@ -80,23 +80,23 @@ export default async function PatientDetailPage({
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Thong tin benh nhan</CardTitle>
+            <CardTitle>Thông tin bệnh nhân</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <InfoRow label="Ho ten" value={patient.fullName} />
-            <InfoRow label="Phong kham" value={patient.clinic.name} />
+            <InfoRow label="Họ tên" value={patient.fullName} />
+            <InfoRow label="Phòng khám" value={patient.clinic.name} />
             <InfoRow
-              label="Ngay sinh"
+              label="Ngày sinh"
               value={
                 patient.dateOfBirth
                   ? format(patient.dateOfBirth, "dd/MM/yyyy")
                   : "—"
               }
             />
-            <InfoRow label="Gioi tinh" value={patient.gender || "—"} />
-            <InfoRow label="Dien thoai" value={patient.phone || "—"} />
+            <InfoRow label="Giới tính" value={patient.gender || "—"} />
+            <InfoRow label="Điện thoại" value={patient.phone || "—"} />
             <InfoRow
-              label="Ma BN (PK)"
+              label="Mã BN (PK)"
               value={patient.clinicPatientId || "—"}
             />
           </CardContent>
@@ -104,11 +104,11 @@ export default async function PatientDetailPage({
 
         <Card>
           <CardHeader>
-            <CardTitle>Ghi chu y khoa</CardTitle>
+            <CardTitle>Ghi chú y khoa</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-              {patient.medicalNotes || "Khong co ghi chu"}
+              {patient.medicalNotes || "Không có ghi chú"}
             </p>
           </CardContent>
         </Card>
@@ -117,23 +117,23 @@ export default async function PatientDetailPage({
       <Card>
         <CardHeader>
           <CardTitle>
-            Danh sach dieu tri ({patient.treatments.length})
+            Danh sách điều trị ({patient.treatments.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {patient.treatments.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              Benh nhan chua co ca dieu tri nao.
+              Bệnh nhân chưa có ca điều trị nào.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Loai dieu tri</TableHead>
-                  <TableHead>Bac si</TableHead>
-                  <TableHead>Ngay bat dau</TableHead>
-                  <TableHead>Trang thai</TableHead>
-                  <TableHead className="text-center">So implant</TableHead>
+                  <TableHead>Loại điều trị</TableHead>
+                  <TableHead>Bác sĩ</TableHead>
+                  <TableHead>Ngày bắt đầu</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead className="text-center">Số implant</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

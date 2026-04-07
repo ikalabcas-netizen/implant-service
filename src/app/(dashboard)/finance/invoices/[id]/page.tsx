@@ -19,11 +19,11 @@ import {
 import { ArrowLeft, CheckCircle2, Building2, Calendar } from "lucide-react";
 
 const INVOICE_STATUS_LABELS: Record<string, string> = {
-  DRAFT: "Nhap",
-  ISSUED: "Da phat hanh",
-  PARTIALLY_PAID: "Thanh toan 1 phan",
-  PAID: "Da thanh toan",
-  OVERDUE: "Qua han",
+  DRAFT: "Nháp",
+  ISSUED: "Đã phát hành",
+  PARTIALLY_PAID: "Thanh toán 1 phần",
+  PAID: "Đã thanh toán",
+  OVERDUE: "Quá hạn",
 };
 
 const INVOICE_STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -100,19 +100,19 @@ export default function InvoiceDetailPage() {
   }
 
   if (loading) {
-    return <p className="text-center text-muted-foreground py-12">Dang tai...</p>;
+    return <p className="text-center text-muted-foreground py-12">Đang tải...</p>;
   }
 
   if (!invoice) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Khong tim thay hoa don.</p>
+        <p className="text-muted-foreground">Không tìm thấy hóa đơn.</p>
         <Button
           variant="ghost"
           className="mt-4"
           render={<Link href="/finance/invoices" />}
         >
-          Quay lai
+          Quay lại
         </Button>
       </div>
     );
@@ -125,7 +125,7 @@ export default function InvoiceDetailPage() {
       <div>
         <Button variant="ghost" size="sm" render={<Link href="/finance/invoices" />}>
           <ArrowLeft data-icon="inline-start" />
-          Quay lai danh sach hoa don
+          Quay lại danh sách hóa đơn
         </Button>
       </div>
 
@@ -139,13 +139,13 @@ export default function InvoiceDetailPage() {
             </Badge>
           </div>
           <p className="text-muted-foreground">
-            Ky: Thang {String(invoice.periodMonth).padStart(2, "0")}/{invoice.periodYear}
+            Kỳ: Tháng {String(invoice.periodMonth).padStart(2, "0")}/{invoice.periodYear}
           </p>
         </div>
         {invoice.status !== "PAID" && (
           <Button onClick={handleMarkPaid} disabled={updating}>
             <CheckCircle2 data-icon="inline-start" />
-            {updating ? "Dang xu ly..." : "Xac nhan da thanh toan"}
+            {updating ? "Đang xử lý..." : "Xác nhận đã thanh toán"}
           </Button>
         )}
       </div>
@@ -156,7 +156,7 @@ export default function InvoiceDetailPage() {
           <CardContent className="flex items-start gap-3 pt-6">
             <Building2 className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Phong kham</p>
+              <p className="text-sm font-medium text-muted-foreground">Phòng khám</p>
               <p className="font-semibold">{invoice.clinic.name}</p>
               <p className="text-sm text-muted-foreground">{invoice.clinic.address}</p>
               {invoice.clinic.phone && (
@@ -167,7 +167,7 @@ export default function InvoiceDetailPage() {
               )}
               {invoice.clinic.representativeName && (
                 <p className="text-sm text-muted-foreground">
-                  Dai dien: {invoice.clinic.representativeName}
+                  Đại diện: {invoice.clinic.representativeName}
                 </p>
               )}
             </div>
@@ -178,22 +178,22 @@ export default function InvoiceDetailPage() {
           <CardContent className="flex items-start gap-3 pt-6">
             <Calendar className="mt-0.5 h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">Thong tin</p>
+              <p className="text-sm font-medium text-muted-foreground">Thông tin</p>
               {invoice.issuedDate && (
                 <p className="text-sm">
-                  Ngay phat hanh:{" "}
+                  Ngày phát hành:{" "}
                   {new Date(invoice.issuedDate).toLocaleDateString("vi-VN")}
                 </p>
               )}
               {invoice.dueDate && (
                 <p className="text-sm">
-                  Han thanh toan:{" "}
+                  Hạn thanh toán:{" "}
                   {new Date(invoice.dueDate).toLocaleDateString("vi-VN")}
                 </p>
               )}
               {invoice.paidDate && (
                 <p className="text-sm text-green-600">
-                  Ngay thanh toan:{" "}
+                  Ngày thanh toán:{" "}
                   {new Date(invoice.paidDate).toLocaleDateString("vi-VN")}
                 </p>
               )}
@@ -205,17 +205,17 @@ export default function InvoiceDetailPage() {
       {/* Line items */}
       <Card>
         <CardHeader>
-          <CardTitle>Chi tiet hoa don</CardTitle>
+          <CardTitle>Chi tiết hóa đơn</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[40px]">#</TableHead>
-                <TableHead>Mo ta</TableHead>
+                <TableHead>Mô tả</TableHead>
                 <TableHead className="text-center">SL</TableHead>
-                <TableHead className="text-right">Don gia</TableHead>
-                <TableHead className="text-right">Thanh tien</TableHead>
+                <TableHead className="text-right">Đơn giá</TableHead>
+                <TableHead className="text-right">Thành tiền</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -239,7 +239,7 @@ export default function InvoiceDetailPage() {
 
           <div className="flex justify-end">
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">Tong cong</p>
+              <p className="text-sm text-muted-foreground">Tổng cộng</p>
               <p className="text-2xl font-bold">{formatVND(grandTotal)}</p>
             </div>
           </div>
@@ -249,7 +249,7 @@ export default function InvoiceDetailPage() {
       {invoice.notes && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Ghi chu</CardTitle>
+            <CardTitle className="text-base">Ghi chú</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm whitespace-pre-wrap">{invoice.notes}</p>

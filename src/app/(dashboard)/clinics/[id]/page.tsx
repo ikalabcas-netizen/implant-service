@@ -61,9 +61,9 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
 
   const statusLabels: Record<string, string> = {
     DRAFT: "Nhap",
-    ACTIVE: "Dang hoat dong",
-    SUSPENDED: "Tam ngung",
-    TERMINATED: "Da cham dut",
+    ACTIVE: "Đang hoạt động",
+    SUSPENDED: "Tạm ngừng",
+    TERMINATED: "Đã chấm dứt",
   };
 
   const statusVariants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -85,12 +85,12 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold">{clinic.name}</h1>
             {clinic.isOutsideHCMC ? (
-              <Badge variant="secondary">Ngoai TPHCM</Badge>
+              <Badge variant="secondary">Ngoài TPHCM</Badge>
             ) : (
               <Badge>TPHCM</Badge>
             )}
           </div>
-          <p className="text-muted-foreground">Chi tiet phong kham</p>
+          <p className="text-muted-foreground">Chi tiết phòng khám</p>
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Benh nhan
+              Bệnh nhân
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -112,7 +112,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Hop dong dang hoat dong
+              Hợp đồng đang hoạt động
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -125,7 +125,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Hoa don
+              Hóa đơn
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -142,24 +142,24 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
-            Thong tin phong kham
+            Thông tin phòng khám
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid gap-4 sm:grid-cols-2">
             <div>
-              <dt className="text-sm text-muted-foreground">Dia chi</dt>
+              <dt className="text-sm text-muted-foreground">Địa chỉ</dt>
               <dd className="flex items-center gap-1 mt-1">
                 <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
                 {clinic.address}
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Thanh pho</dt>
+              <dt className="text-sm text-muted-foreground">Thành phố</dt>
               <dd className="mt-1">{clinic.city || "-"}</dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Dien thoai</dt>
+              <dt className="text-sm text-muted-foreground">Điện thoại</dt>
               <dd className="flex items-center gap-1 mt-1">
                 {clinic.phone ? (
                   <>
@@ -185,7 +185,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Nguoi dai dien</dt>
+              <dt className="text-sm text-muted-foreground">Người đại diện</dt>
               <dd className="flex items-center gap-1 mt-1">
                 <UserIcon className="h-4 w-4 text-muted-foreground" />
                 {clinic.representativeName || "-"}
@@ -197,7 +197,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Ma so thue</dt>
+              <dt className="text-sm text-muted-foreground">Mã số thuế</dt>
               <dd className="mt-1">{clinic.taxId || "-"}</dd>
             </div>
           </dl>
@@ -209,25 +209,25 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Danh sach benh nhan ({clinic.patients.length})
+            Danh sách bệnh nhân ({clinic.patients.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Ho ten</TableHead>
-                <TableHead>Ngay sinh</TableHead>
-                <TableHead>Gioi tinh</TableHead>
-                <TableHead>Dien thoai</TableHead>
-                <TableHead>Ma benh nhan (PK)</TableHead>
+                <TableHead>Họ tên</TableHead>
+                <TableHead>Ngày sinh</TableHead>
+                <TableHead>Giới tính</TableHead>
+                <TableHead>Điện thoại</TableHead>
+                <TableHead>Mã bệnh nhân (PK)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {clinic.patients.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                    Chua co benh nhan nao tai phong kham nay.
+                    Chưa có bệnh nhân nào tại phòng khám này.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -255,25 +255,25 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Stethoscope className="h-5 w-5" />
-            Hop dong bac si ({clinic.doctorContracts.length})
+            Hợp đồng bác sĩ ({clinic.doctorContracts.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Bac si</TableHead>
-                <TableHead>So hop dong</TableHead>
-                <TableHead>Ngay bat dau</TableHead>
-                <TableHead>Ngay ket thuc</TableHead>
-                <TableHead>Trang thai</TableHead>
+                <TableHead>Bác sĩ</TableHead>
+                <TableHead>Số hợp đồng</TableHead>
+                <TableHead>Ngày bắt đầu</TableHead>
+                <TableHead>Ngày kết thúc</TableHead>
+                <TableHead>Trạng thái</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {clinic.doctorContracts.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                    Chua co hop dong nao voi phong kham nay.
+                    Chưa có hợp đồng nào với phòng khám này.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -289,7 +289,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailPageProps
                     <TableCell>
                       {contract.endDate
                         ? new Date(contract.endDate).toLocaleDateString("vi-VN")
-                        : "Vo thoi han"}
+                        : "Vô thời hạn"}
                     </TableCell>
                     <TableCell>
                       <Badge variant={statusVariants[contract.status] ?? "outline"}>
