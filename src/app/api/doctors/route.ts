@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import bcrypt from "bcryptjs";
+
 
 // GET /api/doctors - List all doctors
 export async function GET() {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const {
       fullName,
       email,
-      password,
+      userId,
       dateOfBirth,
       phone,
       specialization,
@@ -60,32 +60,28 @@ export async function POST(req: NextRequest) {
       currentAddress,
     } = body;
 
-    // Check if email already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    // Find user by email or userId
+    const targetUserId = userId || null;
+    let user = targetUserId
+      ? await prisma.user.findUnique({ where: { id: targetUserId } })
+      : email ? await prisma.user.findUnique({ where: { email } }) : null;
 
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "Email da ton tai trong he thong" },
-        { status: 400 }
-      );
+    if (!user && email) {
+      // Create user without password (OAuth-only system)
+      user = await prisma.user.create({
+        data: { email, name: fullName, role: "DOCTOR" },
+      });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    if (!user) {
+      return NextResponse.json({ error: "User khong ton tai" }, { status: 400 });
+    }
 
-    // Create user and doctor in a transaction
+    // Update user role to DOCTOR
+    await prisma.user.update({ where: { id: user.id }, data: { role: "DOCTOR" } });
+
+    // Create doctor profile
     const doctor = await prisma.$transaction(async (tx) => {
-      const user = await tx.user.create({
-        data: {
-          email,
-          passwordHash,
-          name: fullName,
-          role: "DOCTOR",
-          phone: phone || null,
-        },
-      });
-
       const newDoctor = await tx.doctor.create({
         data: {
           userId: user.id,

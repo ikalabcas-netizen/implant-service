@@ -1,22 +1,10 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create admin user
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  await prisma.user.upsert({
-    where: { email: "admin@implantservice.vn" },
-    update: {},
-    create: {
-      email: "admin@implantservice.vn",
-      name: "Admin",
-      passwordHash: adminPassword,
-      role: "ADMIN",
-      phone: "0900000000",
-    },
-  });
+  // Note: First Google OAuth login will become SUPER_ADMIN automatically
+  // No need to seed admin user
 
   // Seed procedure types
   const procedures = [

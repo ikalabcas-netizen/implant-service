@@ -23,36 +23,51 @@ import {
   Receipt,
   FileText,
   Settings,
+  Shield,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const menuItems = [
+interface MenuItem {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  roles: string[];
+}
+
+interface MenuGroup {
+  group: string;
+  items: MenuItem[];
+}
+
+const menuItems: MenuGroup[] = [
   {
     group: "Tong quan",
     items: [
-      { title: "Dashboard", href: "/", icon: LayoutDashboard },
+      { title: "Dashboard", href: "/", icon: LayoutDashboard, roles: ["*"] },
     ],
   },
   {
     group: "Quan ly",
     items: [
-      { title: "Bac si / KTV", href: "/doctors", icon: UserRound },
-      { title: "Phong kham", href: "/clinics", icon: Building2 },
-      { title: "Benh nhan", href: "/patients", icon: Users },
-      { title: "Ca dieu tri", href: "/treatments", icon: Stethoscope },
-      { title: "Ton kho", href: "/inventory", icon: Package },
+      { title: "Bac si / KTV", href: "/doctors", icon: UserRound, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Phong kham", href: "/clinics", icon: Building2, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Benh nhan", href: "/patients", icon: Users, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
+      { title: "Ca dieu tri", href: "/treatments", icon: Stethoscope, roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"] },
+      { title: "Ton kho", href: "/inventory", icon: Package, roles: ["SUPER_ADMIN", "ADMIN", "WAREHOUSE_STAFF"] },
     ],
   },
   {
     group: "Tai chinh",
     items: [
-      { title: "Hoa don & Cong no", href: "/finance", icon: Receipt },
-      { title: "Hop dong", href: "/contracts", icon: FileText },
+      { title: "Hoa don & Cong no", href: "/finance", icon: Receipt, roles: ["SUPER_ADMIN", "ADMIN", "ACCOUNTANT"] },
+      { title: "Hop dong", href: "/contracts", icon: FileText, roles: ["SUPER_ADMIN", "ADMIN"] },
     ],
   },
   {
     group: "He thong",
     items: [
-      { title: "Cai dat", href: "/settings", icon: Settings },
+      { title: "Quan ly nguoi dung", href: "/users", icon: Shield, roles: ["SUPER_ADMIN", "ADMIN"] },
+      { title: "Cai dat", href: "/settings", icon: Settings, roles: ["SUPER_ADMIN"] },
     ],
   },
 ];
@@ -64,19 +79,28 @@ interface AppSidebarProps {
 export function AppSidebar({ user }: AppSidebarProps) {
   const pathname = usePathname();
 
+  const filteredGroups = menuItems
+    .map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) => item.roles.includes("*") || item.roles.includes(user.role)
+      ),
+    }))
+    .filter((group) => group.items.length > 0);
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-4 py-3">
         <Link href="/" className="flex items-center gap-2">
           <Stethoscope className="h-6 w-6 text-primary" />
           <div>
-            <p className="font-semibold text-sm">Implant Service</p>
+            <p className="font-semibold text-sm font-heading">Implant Service</p>
             <p className="text-xs text-muted-foreground">Center</p>
           </div>
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        {menuItems.map((group) => (
+        {filteredGroups.map((group) => (
           <SidebarGroup key={group.group}>
             <SidebarGroupLabel>{group.group}</SidebarGroupLabel>
             <SidebarGroupContent>

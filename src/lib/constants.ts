@@ -2,10 +2,21 @@ export const TRAVEL_ALLOWANCE_VND = 500000;
 export const PIT_RATE = 0.1; // 10% Personal Income Tax
 
 export const ROLE_LABELS: Record<string, string> = {
+  SUPER_ADMIN: "Super Admin",
   ADMIN: "Quan tri vien",
   DOCTOR: "Bac si",
-  TECHNICIAN: "Ky thuat vien",
+  WAREHOUSE_STAFF: "Nhan vien kho",
   ACCOUNTANT: "Ke toan",
+  CUSTOMER: "Khach hang",
+};
+
+export const ROLE_BADGE_COLORS: Record<string, string> = {
+  SUPER_ADMIN: "bg-red-500 text-white",
+  ADMIN: "bg-blue-600 text-white",
+  DOCTOR: "bg-emerald-600 text-white",
+  WAREHOUSE_STAFF: "bg-amber-500 text-white",
+  ACCOUNTANT: "bg-violet-600 text-white",
+  CUSTOMER: "bg-gray-400 text-white",
 };
 
 export const TREATMENT_STATUS_LABELS: Record<string, string> = {

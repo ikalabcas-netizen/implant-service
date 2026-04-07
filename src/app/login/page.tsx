@@ -1,57 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Stethoscope } from "lucide-react";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (result?.error) {
-      setError("Email hoac mat khau khong dung");
-      setLoading(false);
-    } else {
-      router.push("/");
-      router.refresh();
-    }
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/40">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Implant Service Center</CardTitle>
-          <p className="text-muted-foreground text-sm">
-            Dang nhap de quan ly he thong
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            variant="outline"
-            className="w-full"
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] to-[rgba(255,0,61,0.2)]">
+      <div className="w-full max-w-md mx-4">
+        <div className="bg-card rounded-[15px] shadow-2xl p-8 space-y-8">
+          {/* Logo */}
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <Stethoscope className="h-8 w-8 text-primary" />
+            </div>
+            <div className="text-center space-y-1">
+              <h1 className="text-2xl font-bold tracking-tight font-heading">
+                Implant Service Center
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                He thong quan ly dich vu Implant
+              </p>
+            </div>
+          </div>
+
+          {/* Google Sign In */}
+          <button
             onClick={() => signIn("google", { callbackUrl: "/" })}
+            className="w-full flex items-center justify-center gap-3 rounded-full border border-border bg-background px-6 py-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                 fill="#4285F4"
@@ -70,50 +47,14 @@ export default function LoginPage() {
               />
             </svg>
             Dang nhap voi Google
-          </Button>
+          </button>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Hoac dang nhap bang tai khoan
-              </span>
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@implantservice.vn"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Mat khau</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {error && (
-              <p className="text-sm text-destructive">{error}</p>
-            )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Dang xu ly..." : "Dang nhap"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          {/* Footer text */}
+          <p className="text-center text-xs text-muted-foreground">
+            Lien he quan tri vien de duoc cap quyen truy cap
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
