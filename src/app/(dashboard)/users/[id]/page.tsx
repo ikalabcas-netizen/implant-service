@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ROLE_LABELS, ROLE_BADGE_COLORS } from "@/lib/constants";
-import { ArrowLeft, User, Mail, Calendar, Stethoscope } from "lucide-react";
+import { ArrowLeft, User, Mail, Calendar, Stethoscope, Building2 } from "lucide-react";
 import { UserDetailClient } from "./user-detail-client";
 
 function getInitials(name: string): string {
@@ -31,6 +31,7 @@ export default async function UserDetailPage({
   const session = await auth();
   if (!session?.user) redirect("/login");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userRole = (session.user as any).role as string;
   if (userRole !== "SUPER_ADMIN" && userRole !== "ADMIN") {
     redirect("/");
@@ -48,9 +49,9 @@ export default async function UserDetailPage({
       role: true,
       isActive: true,
       createdAt: true,
-      doctor: {
-        select: { id: true },
-      },
+      clinicId: true,
+      clinic: { select: { id: true, name: true } },
+      doctor: { select: { id: true, fullName: true } },
     },
   });
 
@@ -85,11 +86,11 @@ export default async function UserDetailPage({
         </CardHeader>
         <CardContent>
           <div className="flex items-start gap-6">
-            <Avatar size="lg">
+            <Avatar className="h-16 w-16">
               {user.image ? (
                 <AvatarImage src={user.image} alt={user.name} />
               ) : null}
-              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+              <AvatarFallback className="text-lg">{getInitials(user.name)}</AvatarFallback>
             </Avatar>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 flex-1">
@@ -119,7 +120,7 @@ export default async function UserDetailPage({
               <div className="space-y-1">
                 <div className="text-sm text-muted-foreground">Trạng thái</div>
                 <Badge variant={user.isActive ? "default" : "secondary"}>
-                  {user.isActive ? "Hoạt động" : "Vô hiệu hóa"}
+                  {user.isActive ? "Hoạt động" : "Chờ duyệt"}
                 </Badge>
               </div>
 
@@ -145,7 +146,24 @@ export default async function UserDetailPage({
                     className="h-auto p-0"
                     render={<Link href={`/doctors/${user.doctor.id}`} />}
                   >
-                    Xem hồ sơ bác sĩ
+                    {user.doctor.fullName}
+                  </Button>
+                </div>
+              )}
+
+              {user.clinic && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <Building2 className="h-4 w-4" />
+                    Phòng khám
+                  </div>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="h-auto p-0"
+                    render={<Link href={`/clinics/${user.clinic.id}`} />}
+                  >
+                    {user.clinic.name}
                   </Button>
                 </div>
               )}
@@ -154,13 +172,18 @@ export default async function UserDetailPage({
         </CardContent>
       </Card>
 
-      {/* Role change & activation controls */}
+      {/* Role change, doctor/clinic linking, activation controls */}
       <UserDetailClient
         userId={user.id}
+        userName={user.name}
+        userEmail={user.email}
         currentRole={user.role}
         currentIsActive={user.isActive}
         isSelf={isSelf}
         currentUserRole={userRole}
+        linkedDoctorId={user.doctor?.id || null}
+        linkedClinicId={user.clinicId}
+        linkedClinicName={user.clinic?.name || null}
       />
     </div>
   );
