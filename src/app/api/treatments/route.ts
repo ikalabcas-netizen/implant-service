@@ -72,6 +72,8 @@ export async function POST(request: NextRequest) {
       toothNumbers,
       implantCount,
       archType,
+      needsBoneGraft,
+      needsSinusLift,
       planNotes,
     } = body;
 
@@ -92,6 +94,8 @@ export async function POST(request: NextRequest) {
         toothNumbers: toothNumbers || null,
         implantCount: implantCount || 0,
         archType: archType || null,
+        needsBoneGraft: needsBoneGraft ?? false,
+        needsSinusLift: needsSinusLift ?? false,
         planNotes: planNotes || null,
         startDate: new Date(),
       },
