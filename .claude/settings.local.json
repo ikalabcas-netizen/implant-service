@@ -20,7 +20,9 @@
       "Bash(/d/ImplantService/node_modules/.bin/tsc.CMD --noEmit)",
       "Bash(git -C D:/ImplantService add -A)",
       "Bash(git -C D:/ImplantService commit -m 'feat: pending approval for new users + login audit log:*)",
-      "Bash(git -C D:/ImplantService push)"
+      "Bash(git -C D:/ImplantService push)",
+      "Bash(ssh root@89.167.61.19 'cd /tmp/implant-build && git pull origin main 2>&1 | tail -3 && docker build -t implant-service:latest . 2>&1 | tail -5')",
+      "Bash(ssh root@89.167.61.19 ':*)"
     ]
   }
 }

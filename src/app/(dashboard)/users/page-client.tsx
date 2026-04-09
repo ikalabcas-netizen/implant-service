@@ -187,19 +187,29 @@ export function UsersTableClient({
                 {/* Active/Inactive toggle */}
                 <TableCell>
                   {isSelf ? (
-                    <Badge variant={user.isActive ? "default" : "secondary"}>
-                      {user.isActive ? "Hoạt động" : "Vô hiệu hóa"}
-                    </Badge>
+                    <Badge variant="default">Hoạt động</Badge>
+                  ) : !user.isActive ? (
+                    <Button
+                      variant="default"
+                      size="xs"
+                      disabled={isLoading}
+                      className="bg-amber-500 hover:bg-amber-600 text-white"
+                      onClick={() =>
+                        handleToggleActive(user.id, user.isActive)
+                      }
+                    >
+                      Duyệt tài khoản
+                    </Button>
                   ) : (
                     <Button
-                      variant={user.isActive ? "default" : "secondary"}
+                      variant="secondary"
                       size="xs"
                       disabled={isLoading}
                       onClick={() =>
                         handleToggleActive(user.id, user.isActive)
                       }
                     >
-                      {user.isActive ? "Hoạt động" : "Vô hiệu hóa"}
+                      Hoạt động
                     </Button>
                   )}
                 </TableCell>

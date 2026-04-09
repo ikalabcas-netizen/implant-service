@@ -40,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               name: user.name || email.split("@")[0],
               image: user.image || null,
               role: isFirstUser ? "SUPER_ADMIN" : "CUSTOMER",
-              isActive: isFirstUser, // First user active immediately, others need approval
+              isActive: isFirstUser,
             },
           });
         } else {
@@ -51,11 +51,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
           }
         }
-        // Allow inactive users to sign in (they'll see pending page)
+
+        // Record login log
+        try {
+          await prisma.loginLog.create({
+            data: {
+              userId: dbUser.id,
+              provider: account.provider,
+            },
+          });
+        } catch {
+          // Don't block login if logging fails
+        }
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       if (account?.provider === "google" && user?.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
@@ -66,6 +77,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           t.role = dbUser.role;
           t.id = dbUser.id;
           t.isActive = dbUser.isActive;
+        }
+      }
+      // Re-check isActive from DB on every request to catch admin approvals
+      if (trigger !== "signIn" && token.id) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { isActive: true, role: true },
+          });
+          if (dbUser) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const t = token as any;
+            t.isActive = dbUser.isActive;
+            t.role = dbUser.role;
+          }
+        } catch {
+          // Keep existing token values if DB check fails
         }
       }
       return token;
