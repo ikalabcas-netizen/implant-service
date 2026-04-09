@@ -35,6 +35,8 @@ import {
   Settings,
   Shield,
   LogOut,
+  Menu,
+  ChevronRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ROLE_LABELS, ROLE_BADGE_COLORS } from "@/lib/constants";
@@ -93,6 +95,24 @@ interface AppSidebarProps {
   };
 }
 
+function SidebarToggleButton() {
+  const { state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed";
+
+  return (
+    <button
+      onClick={toggleSidebar}
+      className="flex items-center justify-center rounded-md p-1.5 text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+    >
+      {isCollapsed ? (
+        <ChevronRight className="h-5 w-5" />
+      ) : (
+        <Menu className="h-5 w-5" />
+      )}
+    </button>
+  );
+}
+
 function SidebarFooterContent({ user }: { user: AppSidebarProps["user"] }) {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
@@ -110,7 +130,7 @@ function SidebarFooterContent({ user }: { user: AppSidebarProps["user"] }) {
 
   if (isCollapsed) {
     return (
-      <div className="flex flex-col items-center gap-2 py-2">
+      <div className="flex flex-col items-center gap-2 py-1">
         <Tooltip>
           <TooltipTrigger>
             <Avatar className="h-8 w-8">
@@ -119,18 +139,16 @@ function SidebarFooterContent({ user }: { user: AppSidebarProps["user"] }) {
             </Avatar>
           </TooltipTrigger>
           <TooltipContent side="right">
-            <div>
-              <p className="font-medium">{user.name}</p>
-              <p className="text-xs text-muted-foreground">{user.email}</p>
-              <p className="text-xs">{ROLE_LABELS[user.role]}</p>
-            </div>
+            <p className="font-medium">{user.name}</p>
+            <p className="text-xs text-muted-foreground">{user.email}</p>
+            <p className="text-xs">{ROLE_LABELS[user.role]}</p>
           </TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="flex items-center justify-center rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              className="flex items-center justify-center rounded-md p-1.5 text-sidebar-foreground/60 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -146,7 +164,6 @@ function SidebarFooterContent({ user }: { user: AppSidebarProps["user"] }) {
       <Badge className={`w-fit text-[10px] px-2 py-0.5 ${badgeColor}`}>
         {ROLE_LABELS[user.role] || user.role}
       </Badge>
-
       <div className="flex items-center gap-3">
         <Avatar className="h-9 w-9 flex-shrink-0">
           {user.image && <AvatarImage src={user.image} alt={user.name || ""} />}
@@ -154,15 +171,14 @@ function SidebarFooterContent({ user }: { user: AppSidebarProps["user"] }) {
         </Avatar>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{user.name}</p>
-          <p className="text-[11px] text-muted-foreground truncate">
+          <p className="text-[11px] text-sidebar-foreground/60 truncate">
             {user.email}
           </p>
         </div>
       </div>
-
       <button
         onClick={() => signOut({ callbackUrl: "/login" })}
-        className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/60 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
       >
         <LogOut className="h-4 w-4" />
         Đăng xuất
@@ -185,15 +201,21 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-4 py-3 group-data-[collapsible=icon]:px-2">
-        <Link href="/" className="flex items-center gap-2">
-          <Stethoscope className="h-6 w-6 text-primary flex-shrink-0" />
-          <div className="group-data-[collapsible=icon]:hidden">
-            <p className="font-semibold text-sm font-heading">Implant Service</p>
-            <p className="text-xs text-muted-foreground">Center</p>
-          </div>
-        </Link>
+      {/* Header: Logo + Hamburger toggle */}
+      <SidebarHeader className="border-b px-3 py-3">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 min-w-0">
+            <Stethoscope className="h-6 w-6 text-primary flex-shrink-0" />
+            <div className="group-data-[collapsible=icon]:hidden min-w-0">
+              <p className="font-semibold text-sm font-heading truncate">Implant Service</p>
+              <p className="text-xs text-sidebar-foreground/60">Center</p>
+            </div>
+          </Link>
+          <SidebarToggleButton />
+        </div>
       </SidebarHeader>
+
+      {/* Menu */}
       <SidebarContent>
         {filteredGroups.map((group) => (
           <SidebarGroup key={group.group}>
@@ -224,6 +246,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
         ))}
       </SidebarContent>
 
+      {/* Footer: User info + Logout */}
       <SidebarFooter className="border-t p-3 group-data-[collapsible=icon]:p-1.5">
         <SidebarFooterContent user={user} />
       </SidebarFooter>
