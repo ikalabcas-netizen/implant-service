@@ -14,9 +14,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   LayoutDashboard,
   UserRound,
@@ -87,17 +93,9 @@ interface AppSidebarProps {
   };
 }
 
-export function AppSidebar({ user }: AppSidebarProps) {
-  const pathname = usePathname();
-
-  const filteredGroups = menuItems
-    .map((group) => ({
-      ...group,
-      items: group.items.filter(
-        (item) => item.roles.includes("*") || item.roles.includes(user.role)
-      ),
-    }))
-    .filter((group) => group.items.length > 0);
+function SidebarFooterContent({ user }: { user: AppSidebarProps["user"] }) {
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   const initials = user.name
     ? user.name
@@ -110,12 +108,87 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
   const badgeColor = ROLE_BADGE_COLORS[user.role] || "bg-gray-500 text-white";
 
+  if (isCollapsed) {
+    return (
+      <div className="flex flex-col items-center gap-2 py-2">
+        <Tooltip>
+          <TooltipTrigger>
+            <Avatar className="h-8 w-8">
+              {user.image && <AvatarImage src={user.image} alt={user.name || ""} />}
+              <AvatarFallback className="text-[10px]">{initials}</AvatarFallback>
+            </Avatar>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <div>
+              <p className="font-medium">{user.name}</p>
+              <p className="text-xs text-muted-foreground">{user.email}</p>
+              <p className="text-xs">{ROLE_LABELS[user.role]}</p>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger>
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="flex items-center justify-center rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="right">Đăng xuất</TooltipContent>
+        </Tooltip>
+      </div>
+    );
+  }
+
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b px-4 py-3">
+    <div className="flex flex-col gap-3">
+      <Badge className={`w-fit text-[10px] px-2 py-0.5 ${badgeColor}`}>
+        {ROLE_LABELS[user.role] || user.role}
+      </Badge>
+
+      <div className="flex items-center gap-3">
+        <Avatar className="h-9 w-9 flex-shrink-0">
+          {user.image && <AvatarImage src={user.image} alt={user.name || ""} />}
+          <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate">{user.name}</p>
+          <p className="text-[11px] text-muted-foreground truncate">
+            {user.email}
+          </p>
+        </div>
+      </div>
+
+      <button
+        onClick={() => signOut({ callbackUrl: "/login" })}
+        className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+      >
+        <LogOut className="h-4 w-4" />
+        Đăng xuất
+      </button>
+    </div>
+  );
+}
+
+export function AppSidebar({ user }: AppSidebarProps) {
+  const pathname = usePathname();
+
+  const filteredGroups = menuItems
+    .map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) => item.roles.includes("*") || item.roles.includes(user.role)
+      ),
+    }))
+    .filter((group) => group.items.length > 0);
+
+  return (
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="border-b px-4 py-3 group-data-[collapsible=icon]:px-2">
         <Link href="/" className="flex items-center gap-2">
-          <Stethoscope className="h-6 w-6 text-primary" />
-          <div>
+          <Stethoscope className="h-6 w-6 text-primary flex-shrink-0" />
+          <div className="group-data-[collapsible=icon]:hidden">
             <p className="font-semibold text-sm font-heading">Implant Service</p>
             <p className="text-xs text-muted-foreground">Center</p>
           </div>
@@ -136,6 +209,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton
                         isActive={isActive}
+                        tooltip={item.title}
                         render={<Link href={item.href} />}
                       >
                         <item.icon className="h-4 w-4" />
@@ -150,37 +224,8 @@ export function AppSidebar({ user }: AppSidebarProps) {
         ))}
       </SidebarContent>
 
-      {/* User footer - giống MitoEdu */}
-      <SidebarFooter className="border-t p-3">
-        <div className="flex flex-col gap-3">
-          {/* Role badge */}
-          <Badge className={`w-fit text-[10px] px-2 py-0.5 ${badgeColor}`}>
-            {ROLE_LABELS[user.role] || user.role}
-          </Badge>
-
-          {/* User info */}
-          <div className="flex items-center gap-3">
-            <Avatar className="h-9 w-9">
-              {user.image && <AvatarImage src={user.image} alt={user.name || ""} />}
-              <AvatarFallback className="text-xs">{initials}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-[11px] text-muted-foreground truncate">
-                {user.email}
-              </p>
-            </div>
-          </div>
-
-          {/* Logout button */}
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          >
-            <LogOut className="h-4 w-4" />
-            Đăng xuất
-          </button>
-        </div>
+      <SidebarFooter className="border-t p-3 group-data-[collapsible=icon]:p-1.5">
+        <SidebarFooterContent user={user} />
       </SidebarFooter>
     </Sidebar>
   );
