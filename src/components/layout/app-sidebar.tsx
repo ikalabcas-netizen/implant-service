@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -13,6 +15,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   LayoutDashboard,
   UserRound,
@@ -24,8 +28,10 @@ import {
   FileText,
   Settings,
   Shield,
+  LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { ROLE_LABELS, ROLE_BADGE_COLORS } from "@/lib/constants";
 
 interface MenuItem {
   title: string;
@@ -73,7 +79,12 @@ const menuItems: MenuGroup[] = [
 ];
 
 interface AppSidebarProps {
-  user: { name?: string | null; role: string };
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role: string;
+  };
 }
 
 export function AppSidebar({ user }: AppSidebarProps) {
@@ -87,6 +98,17 @@ export function AppSidebar({ user }: AppSidebarProps) {
       ),
     }))
     .filter((group) => group.items.length > 0);
+
+  const initials = user.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "U";
+
+  const badgeColor = ROLE_BADGE_COLORS[user.role] || "bg-gray-500 text-white";
 
   return (
     <Sidebar>
@@ -127,6 +149,39 @@ export function AppSidebar({ user }: AppSidebarProps) {
           </SidebarGroup>
         ))}
       </SidebarContent>
+
+      {/* User footer - giống MitoEdu */}
+      <SidebarFooter className="border-t p-3">
+        <div className="flex flex-col gap-3">
+          {/* Role badge */}
+          <Badge className={`w-fit text-[10px] px-2 py-0.5 ${badgeColor}`}>
+            {ROLE_LABELS[user.role] || user.role}
+          </Badge>
+
+          {/* User info */}
+          <div className="flex items-center gap-3">
+            <Avatar className="h-9 w-9">
+              {user.image && <AvatarImage src={user.image} alt={user.name || ""} />}
+              <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{user.name}</p>
+              <p className="text-[11px] text-muted-foreground truncate">
+                {user.email}
+              </p>
+            </div>
+          </div>
+
+          {/* Logout button */}
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          >
+            <LogOut className="h-4 w-4" />
+            Đăng xuất
+          </button>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
