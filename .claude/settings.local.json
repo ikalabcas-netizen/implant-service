@@ -3,7 +3,24 @@
     "allow": [
       "Bash(gcloud --version)",
       "Bash(gcloud auth:*)",
-      "Bash(gcloud services:*)"
+      "Bash(gcloud services:*)",
+      "Bash(npx prisma:*)",
+      "Bash(pip install:*)",
+      "Bash(python -c \"import PySide6; import vtk; import SimpleITK; import numpy; print\\(''All imports OK''\\); print\\(f''PySide6: {PySide6.__version__}''\\); print\\(f''VTK: {vtk.vtkVersion.GetVTKVersion\\(\\)}''\\); print\\(f''SimpleITK: {SimpleITK.__version__}''\\); print\\(f''NumPy: {numpy.__version__}''\\)\")",
+      "Bash(timeout 5 python main.py)",
+      "Bash(python -c \":*)",
+      "WebSearch",
+      "Bash(python -c ':*)",
+      "Bash(python main.py)",
+      "Bash(pyinstaller build.spec --clean)",
+      "Bash(D:/ImplantService/tools/dicom2stl/dist/DicomToSTL/DicomToSTL.exe)",
+      "Bash(npx tsc:*)",
+      "Bash(node node_modules/.bin/tsc --noEmit)",
+      "Bash(node -e \"require\\('child_process'\\).execSync\\('npx tsc --noEmit', {stdio: 'inherit'}\\)\")",
+      "Bash(/d/ImplantService/node_modules/.bin/tsc.CMD --noEmit)",
+      "Bash(git -C D:/ImplantService add -A)",
+      "Bash(git -C D:/ImplantService commit -m 'feat: pending approval for new users + login audit log:*)",
+      "Bash(git -C D:/ImplantService push)"
     ]
   }
 }

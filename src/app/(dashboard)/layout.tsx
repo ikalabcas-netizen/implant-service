@@ -15,6 +15,10 @@ export default async function DashboardLayout({
   const session = await auth();
   if (!session?.user) redirect("/login");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isActive = (session.user as any).isActive;
+  if (isActive === false) redirect("/pending");
+
   return (
     <SidebarProvider>
       <AppSidebar user={session.user} />

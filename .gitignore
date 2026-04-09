@@ -43,3 +43,6 @@ next-env.d.ts
 /src/generated/prisma
 .env
 .env.local
+
+# tools (standalone desktop apps, not part of the web project)
+/tools/

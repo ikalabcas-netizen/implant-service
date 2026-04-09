@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import type { UserRole } from "@prisma/client";
 
 declare module "next-auth" {
-  interface User { role: UserRole; }
+  interface User { role: UserRole; isActive: boolean; }
   interface Session {
     user: {
       id: string;
@@ -12,6 +12,7 @@ declare module "next-auth" {
       name: string;
       role: UserRole;
       image?: string | null;
+      isActive: boolean;
     };
   }
 }
@@ -32,16 +33,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         let dbUser = await prisma.user.findUnique({ where: { email } });
         if (!dbUser) {
           const userCount = await prisma.user.count();
+          const isFirstUser = userCount === 0;
           dbUser = await prisma.user.create({
             data: {
               email,
               name: user.name || email.split("@")[0],
               image: user.image || null,
-              role: userCount === 0 ? "SUPER_ADMIN" : "CUSTOMER",
+              role: isFirstUser ? "SUPER_ADMIN" : "CUSTOMER",
+              isActive: isFirstUser, // First user active immediately, others need approval
             },
           });
         } else {
-          // Update image on each login
           if (user.image && user.image !== dbUser.image) {
             await prisma.user.update({
               where: { id: dbUser.id },
@@ -49,7 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
           }
         }
-        if (!dbUser.isActive) return false;
+        // Allow inactive users to sign in (they'll see pending page)
       }
       return true;
     },
@@ -63,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const t = token as any;
           t.role = dbUser.role;
           t.id = dbUser.id;
+          t.isActive = dbUser.isActive;
         }
       }
       return token;
@@ -72,6 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const s = session as any;
       s.user.role = token.role;
       s.user.id = token.id;
+      s.user.isActive = token.isActive;
       return session;
     },
   },
