@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import type { UserRole } from "@prisma/client";
 
 declare module "next-auth" {
-  interface User { role: UserRole; isActive: boolean; }
+  interface User { role: UserRole; isActive: boolean; clinicId?: string | null; }
   interface Session {
     user: {
       id: string;
@@ -13,6 +13,7 @@ declare module "next-auth" {
       role: UserRole;
       image?: string | null;
       isActive: boolean;
+      clinicId?: string | null;
     };
   }
 }
@@ -77,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           t.role = dbUser.role;
           t.id = dbUser.id;
           t.isActive = dbUser.isActive;
+          t.clinicId = dbUser.clinicId ?? null;
         }
       }
       // Re-check isActive from DB on every request to catch admin approvals
@@ -84,13 +86,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           const dbUser = await prisma.user.findUnique({
             where: { id: token.id as string },
-            select: { isActive: true, role: true },
+            select: { isActive: true, role: true, clinicId: true },
           });
           if (dbUser) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const t = token as any;
             t.isActive = dbUser.isActive;
             t.role = dbUser.role;
+            t.clinicId = dbUser.clinicId ?? null;
           }
         } catch {
           // Keep existing token values if DB check fails
@@ -104,6 +107,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       s.user.role = token.role;
       s.user.id = token.id;
       s.user.isActive = token.isActive;
+      s.user.clinicId = token.clinicId as string | null;
       return session;
     },
   },

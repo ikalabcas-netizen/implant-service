@@ -41,6 +41,7 @@ const STATUS_VARIANT: Record<
   COMPLETED: "default",
   CANCELLED: "destructive",
   COMPLICATION: "destructive",
+  AWAITING_DOCTOR: "outline",
 };
 
 const STEP_STATUS_VARIANT: Record<
@@ -209,10 +210,18 @@ export default async function TreatmentDetailPage({
               <p className="text-sm font-medium text-muted-foreground">
                 Bác sĩ
               </p>
-              <p className="font-semibold">{treatment.doctor.fullName}</p>
-              {treatment.doctor.specialization && (
-                <p className="text-sm text-muted-foreground">
-                  {treatment.doctor.specialization}
+              {treatment.doctor ? (
+                <>
+                  <p className="font-semibold">{treatment.doctor.fullName}</p>
+                  {treatment.doctor.specialization && (
+                    <p className="text-sm text-muted-foreground">
+                      {treatment.doctor.specialization}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className="font-semibold text-muted-foreground italic">
+                  Chưa có bác sĩ
                 </p>
               )}
             </div>

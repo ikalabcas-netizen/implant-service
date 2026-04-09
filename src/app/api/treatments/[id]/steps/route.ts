@@ -96,25 +96,27 @@ export async function POST(
     let baseFee = Number(catalogItem.defaultFeeVND);
     let discountRule = catalogItem.discountRule;
 
-    const contract = await prisma.doctorClinicContract.findUnique({
-      where: {
-        doctorId_clinicId: {
-          doctorId: treatment.doctorId,
-          clinicId: treatment.clinicId,
+    if (treatment.doctorId) {
+      const contract = await prisma.doctorClinicContract.findUnique({
+        where: {
+          doctorId_clinicId: {
+            doctorId: treatment.doctorId,
+            clinicId: treatment.clinicId,
+          },
         },
-      },
-      include: {
-        feeSchedules: {
-          where: { catalogItemId },
+        include: {
+          feeSchedules: {
+            where: { catalogItemId },
+          },
         },
-      },
-    });
+      });
 
-    if (contract && contract.feeSchedules.length > 0) {
-      const feeSchedule = contract.feeSchedules[0];
-      baseFee = Number(feeSchedule.feeVND);
-      if (feeSchedule.discountRule) {
-        discountRule = feeSchedule.discountRule;
+      if (contract && contract.feeSchedules.length > 0) {
+        const feeSchedule = contract.feeSchedules[0];
+        baseFee = Number(feeSchedule.feeVND);
+        if (feeSchedule.discountRule) {
+          discountRule = feeSchedule.discountRule;
+        }
       }
     }
 

@@ -14,6 +14,11 @@ const MENU_ACCESS: Record<string, AppRole[]> = {
   "/contracts": ["SUPER_ADMIN", "ADMIN"],
   "/users": ["SUPER_ADMIN", "ADMIN"],
   "/settings": ["SUPER_ADMIN"],
+  "/clinic-portal": ["CUSTOMER"],
+  "/clinic-portal/patients": ["CUSTOMER"],
+  "/clinic-portal/cases": ["CUSTOMER"],
+  "/doctor-portal": ["DOCTOR"],
+  "/doctor-portal/requests": ["DOCTOR"],
 };
 
 export function canAccessMenu(role: string, path: string): boolean {

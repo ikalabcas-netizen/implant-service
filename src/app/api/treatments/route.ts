@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         patientId: t.patientId,
         patientName: t.patient.fullName,
         doctorId: t.doctorId,
-        doctorName: t.doctor.fullName,
+        doctorName: t.doctor?.fullName || null,
         clinicId: t.clinicId,
         type: t.type,
         status: t.status,
@@ -75,9 +75,9 @@ export async function POST(request: NextRequest) {
       planNotes,
     } = body;
 
-    if (!patientId || !doctorId || !clinicId || !type) {
+    if (!patientId || !clinicId || !type) {
       return NextResponse.json(
-        { error: "Benh nhan, bac si, phong kham va loai dieu tri la bat buoc" },
+        { error: "Benh nhan, phong kham va loai dieu tri la bat buoc" },
         { status: 400 }
       );
     }
@@ -85,9 +85,10 @@ export async function POST(request: NextRequest) {
     const treatment = await prisma.treatment.create({
       data: {
         patientId,
-        doctorId,
+        doctorId: doctorId || null,
         clinicId,
         type,
+        status: doctorId ? "PLANNING" : "AWAITING_DOCTOR",
         toothNumbers: toothNumbers || null,
         implantCount: implantCount || 0,
         archType: archType || null,

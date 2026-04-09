@@ -25,6 +25,7 @@ export const TREATMENT_STATUS_LABELS: Record<string, string> = {
   WAITING_HEALING: "Chờ lành thương",
   PROSTHETIC_PHASE: "Phục hình",
   COMPLETED: "Hoàn thành",
+  AWAITING_DOCTOR: "Chờ bác sĩ nhận ca",
   CANCELLED: "Đã hủy",
   COMPLICATION: "Biến chứng",
 };
@@ -68,5 +69,22 @@ export const CATALOG_CATEGORY_LABELS: Record<string, string> = {
   REUSABLE: "Vật tư tái sử dụng",
   TOOL: "Dụng cụ",
   EQUIPMENT: "Thiết bị",
+  OTHER: "Khác",
+};
+
+export const CASE_REQUEST_STATUS_LABELS: Record<string, string> = {
+  PENDING: "Chờ xử lý",
+  MATCHING: "Đang tìm bác sĩ",
+  ASSIGNED: "Đã có bác sĩ",
+  EXPIRED: "Hết hạn",
+  CANCELLED: "Đã hủy",
+};
+
+export const FILE_TYPE_LABELS: Record<string, string> = {
+  CBCT: "Phim CT Cone Beam",
+  XRAY: "X-quang",
+  ORAL_SCAN: "Oral Scan",
+  PHOTO: "Hình ảnh",
+  DOCUMENT: "Tài liệu",
   OTHER: "Khác",
 };

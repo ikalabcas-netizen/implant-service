@@ -25,6 +25,7 @@ const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "
   COMPLETED: "default",
   CANCELLED: "destructive",
   COMPLICATION: "destructive",
+  AWAITING_DOCTOR: "outline",
 };
 
 async function getTreatments(status?: string) {
@@ -127,7 +128,7 @@ export default async function TreatmentsPage({
                           {t.patient.fullName}
                         </Link>
                       </TableCell>
-                      <TableCell>{t.doctor.fullName}</TableCell>
+                      <TableCell>{t.doctor?.fullName || "Chưa có bác sĩ"}</TableCell>
                       <TableCell>
                         {TREATMENT_TYPE_LABELS[t.type] || t.type}
                       </TableCell>

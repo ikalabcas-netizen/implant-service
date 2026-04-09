@@ -25,12 +25,15 @@ model User {
   role      UserRole @default(CUSTOMER)
   phone     String?
   isActive  Boolean  @default(true)
+  clinicId  String?
+  clinic    Clinic?  @relation(fields: [clinicId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  doctor    Doctor?
-  sessions  Session[]
-  loginLogs LoginLog[]
+  doctor        Doctor?
+  sessions      Session[]
+  loginLogs     LoginLog[]
+  notifications Notification[]
 }
 
 model LoginLog {
@@ -77,11 +80,15 @@ model Doctor {
   bankName         String?
   taxId            String?
   specialization   String?
+  telegramChatId   String?
+  zaloUserId       String?
 
   certifications  Certification[]
   clinicContracts DoctorClinicContract[]
   treatments      Treatment[]
   paymentVouchers PaymentVoucher[]
+  caseRequests    CaseRequest[]     @relation("MatchedDoctor")
+  caseRequestLogs CaseRequestLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -115,10 +122,12 @@ model Clinic {
   isOutsideHCMC      Boolean @default(false)
   isActive           Boolean @default(true)
 
+  users           User[]
   doctorContracts DoctorClinicContract[]
   patients        Patient[]
   invoices        Invoice[]
   debtRecords     DebtRecord[]
+  caseRequests    CaseRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -250,6 +259,7 @@ model Patient {
 
 enum TreatmentStatus {
   PLANNING
+  AWAITING_DOCTOR
   IN_PROGRESS
   WAITING_HEALING
   PROSTHETIC_PHASE
@@ -270,27 +280,117 @@ enum TreatmentType {
 }
 
 model Treatment {
-  id             String          @id @default(cuid())
-  patientId      String
-  patient        Patient         @relation(fields: [patientId], references: [id])
-  doctorId       String
-  doctor         Doctor          @relation(fields: [doctorId], references: [id])
-  clinicId       String
-  type           TreatmentType
-  status         TreatmentStatus @default(PLANNING)
-  toothNumbers   String?
-  implantCount   Int             @default(0)
-  archType       String?
-  cbctImageUrl   String?
-  xrayImageUrl   String?
-  planNotes      String?
-  startDate      DateTime?
-  completionDate DateTime?
+  id              String          @id @default(cuid())
+  patientId       String
+  patient         Patient         @relation(fields: [patientId], references: [id])
+  doctorId        String?
+  doctor          Doctor?         @relation(fields: [doctorId], references: [id])
+  clinicId        String
+  type            TreatmentType
+  status          TreatmentStatus @default(PLANNING)
+  toothNumbers    String?
+  implantCount    Int             @default(0)
+  archType        String?
+  needsBoneGraft  Boolean         @default(false)
+  needsSinusLift  Boolean         @default(false)
+  cbctImageUrl    String?
+  xrayImageUrl    String?
+  planNotes       String?
+  startDate       DateTime?
+  completionDate  DateTime?
 
-  steps TreatmentStep[]
+  steps       TreatmentStep[]
+  files       TreatmentFile[]
+  caseRequest CaseRequest?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ============ TREATMENT FILES ============
+
+enum FileType {
+  CBCT
+  XRAY
+  ORAL_SCAN
+  PHOTO
+  DOCUMENT
+  OTHER
+}
+
+model TreatmentFile {
+  id           String   @id @default(cuid())
+  treatmentId  String
+  treatment    Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  fileName     String
+  fileType     FileType
+  filePath     String
+  fileSize     Int?
+  mimeType     String?
+  uploadedById String
+  createdAt    DateTime @default(now())
+}
+
+// ============ CASE REQUESTS (Doctor Matching) ============
+
+enum CaseRequestStatus {
+  PENDING
+  MATCHING
+  ASSIGNED
+  EXPIRED
+  CANCELLED
+}
+
+enum RequestLogStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model CaseRequest {
+  id                    String            @id @default(cuid())
+  treatmentId           String            @unique
+  treatment             Treatment         @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  clinicId              String
+  clinic                Clinic            @relation(fields: [clinicId], references: [id])
+  status                CaseRequestStatus @default(PENDING)
+  matchedDoctorId       String?
+  matchedDoctor         Doctor?           @relation("MatchedDoctor", fields: [matchedDoctorId], references: [id])
+  matchRound            Int               @default(1)
+  suggestedDoctorIds    Json?
+  clinicSelectedDoctorId String?
+  createdAt             DateTime          @default(now())
+  expiresAt             DateTime?
+  assignedAt            DateTime?
+
+  logs CaseRequestLog[]
+}
+
+model CaseRequestLog {
+  id            String           @id @default(cuid())
+  caseRequestId String
+  caseRequest   CaseRequest      @relation(fields: [caseRequestId], references: [id], onDelete: Cascade)
+  doctorId      String
+  doctor        Doctor           @relation(fields: [doctorId], references: [id])
+  status        RequestLogStatus @default(SENT)
+  sentAt        DateTime         @default(now())
+  respondedAt   DateTime?
+  rejectReason  String?
+}
+
+// ============ NOTIFICATIONS ============
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 // ============ TREATMENT STEPS ============

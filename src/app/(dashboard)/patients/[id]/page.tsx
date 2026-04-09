@@ -142,7 +142,7 @@ export default async function PatientDetailPage({
                     <TableCell className="font-medium">
                       {TREATMENT_TYPE_LABELS[treatment.type] || treatment.type}
                     </TableCell>
-                    <TableCell>{treatment.doctor.fullName}</TableCell>
+                    <TableCell>{treatment.doctor?.fullName || "Chưa có bác sĩ"}</TableCell>
                     <TableCell>
                       {treatment.startDate
                         ? format(treatment.startDate, "dd/MM/yyyy")

@@ -37,6 +37,8 @@ import {
   LogOut,
   Menu,
   ChevronRight,
+  PlusCircle,
+  Bell,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ROLE_LABELS, ROLE_BADGE_COLORS } from "@/lib/constants";
@@ -75,6 +77,22 @@ const menuItems: MenuGroup[] = [
     items: [
       { title: "Hóa đơn & Công nợ", href: "/finance", icon: Receipt, roles: ["SUPER_ADMIN", "ADMIN", "ACCOUNTANT"] },
       { title: "Hợp đồng", href: "/contracts", icon: FileText, roles: ["SUPER_ADMIN", "ADMIN"] },
+    ],
+  },
+  {
+    group: "Phòng khám",
+    items: [
+      { title: "Tổng quan PK", href: "/clinic-portal", icon: Building2, roles: ["CUSTOMER"] },
+      { title: "Bệnh nhân", href: "/clinic-portal/patients", icon: Users, roles: ["CUSTOMER"] },
+      { title: "Tạo ca mới", href: "/clinic-portal/cases/new", icon: PlusCircle, roles: ["CUSTOMER"] },
+      { title: "Ca điều trị", href: "/clinic-portal/cases", icon: Stethoscope, roles: ["CUSTOMER"] },
+    ],
+  },
+  {
+    group: "Ca của tôi",
+    items: [
+      { title: "Yêu cầu mới", href: "/doctor-portal/requests", icon: Bell, roles: ["DOCTOR"] },
+      { title: "Ca đang điều trị", href: "/doctor-portal", icon: Stethoscope, roles: ["DOCTOR"] },
     ],
   },
   {

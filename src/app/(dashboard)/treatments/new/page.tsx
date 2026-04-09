@@ -93,8 +93,8 @@ export default function NewTreatmentPage() {
     e.preventDefault();
     setError("");
 
-    if (!patientId || !doctorId || !type) {
-      setError("Bệnh nhân, bác sĩ và loại điều trị là bắt buộc");
+    if (!patientId || !type) {
+      setError("Bệnh nhân và loại điều trị là bắt buộc");
       return;
     }
 
@@ -105,7 +105,7 @@ export default function NewTreatmentPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           patientId,
-          doctorId,
+          doctorId: doctorId || null,
           clinicId,
           type,
           toothNumbers: toothNumbers.trim() || null,
@@ -174,15 +174,16 @@ export default function NewTreatmentPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Bác sĩ *</Label>
+              <Label>Bác sĩ</Label>
               <Select
                 value={doctorId}
                 onValueChange={(v) => setDoctorId(v ?? "")}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chọn bác sĩ" />
+                  <SelectValue placeholder="Chưa chọn (chờ phân bác sĩ)" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="">Chưa chọn bác sĩ</SelectItem>
                   {doctors.map((d) => (
                     <SelectItem key={d.id} value={d.id}>
                       {d.fullName}

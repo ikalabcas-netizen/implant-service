@@ -433,7 +433,7 @@ export default async function CatalogItemDetailPage({
                       </Link>
                     </TableCell>
                     <TableCell>
-                      {step.treatment.doctor.fullName}
+                      {step.treatment.doctor?.fullName || "Chưa có bác sĩ"}
                     </TableCell>
                     <TableCell>
                       {new Date(step.createdAt).toLocaleDateString("vi-VN")}

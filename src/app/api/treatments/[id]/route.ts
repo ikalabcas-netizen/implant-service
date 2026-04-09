@@ -80,6 +80,7 @@ export async function PUT(
 
     const {
       status,
+      doctorId,
       planNotes,
       toothNumbers,
       implantCount,
@@ -88,11 +89,16 @@ export async function PUT(
       completionDate,
       cbctImageUrl,
       xrayImageUrl,
+      needsBoneGraft,
+      needsSinusLift,
     } = body;
 
     const data: Record<string, unknown> = {};
     if (status !== undefined) data.status = status;
+    if (doctorId !== undefined) data.doctorId = doctorId || null;
     if (planNotes !== undefined) data.planNotes = planNotes;
+    if (needsBoneGraft !== undefined) data.needsBoneGraft = needsBoneGraft;
+    if (needsSinusLift !== undefined) data.needsSinusLift = needsSinusLift;
     if (toothNumbers !== undefined) data.toothNumbers = toothNumbers;
     if (implantCount !== undefined) data.implantCount = implantCount;
     if (archType !== undefined) data.archType = archType;

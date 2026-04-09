@@ -48,7 +48,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { role, isActive } = body;
+  const { role, isActive, clinicId } = body;
 
   // Cannot change own role
   if (role !== undefined && session.user.id === id) {
@@ -107,6 +107,7 @@ export async function PUT(
   const updateData: Record<string, unknown> = {};
   if (role !== undefined) updateData.role = role;
   if (isActive !== undefined) updateData.isActive = isActive;
+  if (clinicId !== undefined) updateData.clinicId = clinicId || null;
 
   if (Object.keys(updateData).length === 0) {
     return NextResponse.json(
