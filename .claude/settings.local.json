@@ -22,7 +22,13 @@
       "Bash(git -C D:/ImplantService commit -m 'feat: pending approval for new users + login audit log:*)",
       "Bash(git -C D:/ImplantService push)",
       "Bash(ssh root@89.167.61.19 'cd /tmp/implant-build && git pull origin main 2>&1 | tail -3 && docker build -t implant-service:latest . 2>&1 | tail -5')",
-      "Bash(ssh root@89.167.61.19 ':*)"
+      "Bash(ssh root@89.167.61.19 ':*)",
+      "Bash(ssh root@89.167.61.19 'docker ps --filter \"name=iadqtr\" --format \"{{.Names}} {{.Status}} {{.Image}}\"')",
+      "Bash(ssh root@89.167.61.19 'docker ps --filter \"name=iadqtr\" --format \"{{.Names}} {{.Status}} {{.Image}}\" 2>&1; echo \"---\"; docker exec coolify-db psql -U coolify -d coolify -t -c \"SELECT status FROM application_deployment_queues WHERE application_id = 7 ORDER BY created_at DESC LIMIT 1;\" 2>&1')",
+      "Bash(curl -s --resolve 'isc.ikalab.vn:443:104.21.62.238' -o /dev/null -w '%{http_code}' https://isc.ikalab.vn/login)",
+      "Bash(gh webhook:*)",
+      "Bash(gh api:*)",
+      "Bash(ssh root@89.167.61.19 'docker ps --filter \"name=iadqtr\" --format \"{{.Names}} | {{.Status}} | {{.Image}}\"')"
     ]
   }
 }
