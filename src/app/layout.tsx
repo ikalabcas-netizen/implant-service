@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bai_Jamjuree, Inter } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 
 const baiJamjuree = Bai_Jamjuree({
@@ -15,7 +16,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Implant Service Center",
-  description: "He thong quan ly dich vu cam ghep Implant nha khoa",
+  description: "Hệ thống quản lý dịch vụ cấy ghép Implant nha khoa",
 };
 
 export default function RootLayout({
@@ -28,7 +29,9 @@ export default function RootLayout({
       lang="vi"
       className={`${inter.variable} ${baiJamjuree.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

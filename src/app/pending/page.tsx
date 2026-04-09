@@ -1,12 +1,15 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Clock, LogOut, RefreshCw } from "lucide-react";
 
 export default function PendingPage() {
   const { data: session } = useSession();
-  const router = useRouter();
+
+  function handleRetry() {
+    // Force full page reload to re-check isActive from DB via server layout
+    window.location.href = "/";
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] to-[rgba(255,0,61,0.2)]">
@@ -38,7 +41,7 @@ export default function PendingPage() {
 
           <div className="flex gap-3">
             <button
-              onClick={() => router.refresh()}
+              onClick={handleRetry}
               className="flex-1 flex items-center justify-center gap-2 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
             >
               <RefreshCw className="h-4 w-4" />
